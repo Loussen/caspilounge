@@ -48,15 +48,11 @@ if($checkboxes!=''){
 		<div class="inner">
 			<?php
 			if(is_file("pages/".$do.".php")) include "pages/".$do.".php";
-			else echo '<center><strong id="basliq1"><h1>Fizuli Hüseynov</h1>
+			else echo '<center><strong id="basliq1"><h1>Caspi Bar Dining Lounge</h1>
 </strong></center>
             <br>
             <div class="page">
-<p style="text-align: right;"><i>Mən, Hüseynov Fizuli Məmməd oğlu, 1973-cü ildə Naxçıvan MR Kəngərli rayon Qabıllı kəndində doğulmuşam. 1990-cı ildə Qabıllı kənd orta məktəbini gümüş medalla bitirib, Azərbaycan Tibb Unversitetinin tibbi profilaktika fakültəsinə daxil olmuşam və 1996-cı ildə bitirmişəm.
-
-İxtisasca infeksionistəm amma heç işləməmişəm bu sahə üzrə.
-
-1998-ci ildə Herba Flora şirkətini təsis etmişəm və hal hazırda həmin şirkətin aparıcı mütəxəssisiyəm.
+<p style="text-align: right;"><i>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 </div>';
 			?>
 		</div>
