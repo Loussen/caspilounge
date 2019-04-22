@@ -7,9 +7,11 @@
         <li><a href="index.php?do=pevents"><img src="images/pevents.png" alt="" width="25"/>Private events</a></li>
         <li><a href="index.php?do=sliders2nd"><img src="images/sliders.png" alt="" width="25"/>Sliders middle</a></li>
         <li><a href="index.php?do=sliders3rd"><img src="images/sliders.png" alt="" width="25"/>Sliders bottom</a></li>
-        <li><a href="index.php?do=food_menus"><img src="images/menus.png" alt="" width="25"/>Menus</a></li>
+        <li><a href="index.php?do=food_menus"><img src="images/sliders.png" alt="" width="25"/>Menus images</a></li>
         <li><a href="index.php?do=alboms"><img src="images/alboms.png" alt="" width="25"/>Alboms</a></li>
         <li><a href="index.php?do=gallery"><img src="images/gallery.png" alt="" width="25"/>Gallery</a></li>
+        <li><a href="index.php?do=categories"><img src="images/categories.png" alt="" width="25"/>Menu categories</a></li>
+        <li><a href="index.php?do=foods"><img src="images/menus.png" alt="" width="25"/>Menus</a></li>
         <li><a href="javascript::void(0);">&nbsp;&nbsp;</a></li>
 
 		<li><a href="index.php?do=menus"><img src="images/menus.png" alt="" width="25"/>Menus</a></li>
