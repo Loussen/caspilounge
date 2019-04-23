@@ -15,19 +15,43 @@ $response = json_encode(array("status"=>false, "type"=>"menus", "err" => "Error 
 $main_lang = mysqli_real_escape_string($db,$_GET['main_lang']);
 $active_status = 1;
 
-$stmt_select = mysqli_prepare($db,
-    "SELECT
-                    `foods`.`auto_id` as `id`,
-                    `foods`.`title`,
-                    `foods`.`text`,
-                    `foods`.`price`,
-                    `categories`.`name` as 'categoryName',
-                    `categories`.`auto_id` as 'categoryId'
-                    FROM `foods`
-                    LEFT JOIN `categories` on `categories`.`auto_id`=`foods`.`cat_id`
-                    WHERE `foods`.`lang_id`=(?) and `foods`.`active`=(?)
-                    ORDER BY `foods`.`order_number`");
-$stmt_select->bind_param('ii', $main_lang,$active_status);
+
+if(isset($_GET['category_id']) && !empty($_GET['category_id']))
+{
+    $category_id = intval($_GET['category_id']);
+
+    $stmt_select = mysqli_prepare($db,
+        "SELECT
+                `foods`.`auto_id` as `id`,
+                `foods`.`title`,
+                `foods`.`text`,
+                `foods`.`price`,
+                `categories`.`name` as 'categoryName',
+                `categories`.`auto_id` as 'categoryId'
+                FROM `foods`
+                LEFT JOIN `categories` on `categories`.`auto_id`=`foods`.`cat_id`
+                WHERE `foods`.`lang_id`=(?) and `foods`.`active`=(?) and `foods`.`cat_id`=(?)
+                ORDER BY `foods`.`order_number`");
+    $stmt_select->bind_param('iii', $main_lang,$active_status,$category_id);
+}
+else
+{
+    $stmt_select = mysqli_prepare($db,
+        "SELECT
+                `foods`.`auto_id` as `id`,
+                `foods`.`title`,
+                `foods`.`text`,
+                `foods`.`price`,
+                `categories`.`name` as 'categoryName',
+                `categories`.`auto_id` as 'categoryId'
+                FROM `foods`
+                LEFT JOIN `categories` on `categories`.`auto_id`=`foods`.`cat_id`
+                WHERE `foods`.`lang_id`=(?) and `foods`.`active`=(?)
+                ORDER BY `foods`.`order_number`");
+    $stmt_select->bind_param('ii', $main_lang,$active_status);
+}
+
+
 $stmt_select->execute();
 $result = $stmt_select->get_result();
 $stmt_select->close();

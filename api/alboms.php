@@ -38,6 +38,7 @@ if($result->num_rows>0)
         $data[] = $row;
 
         $data[$i]['image_name'] = SITE_PATH."/images/alboms/".$row['image_name'];
+        $data[$i]['date'] = date("d/m/Y", $row['date']);
 
         $i++;
     }
