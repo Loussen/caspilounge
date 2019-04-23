@@ -35,6 +35,31 @@ if($result->num_rows>0)
     {
         $data[] = $row;
 
+        $stmt_select = mysqli_prepare($db,
+            "SELECT
+                    `auto_id` as `id`,
+                    `title`,
+                    `text`,
+                    `price`
+                    FROM `foods`
+                    WHERE `cat_id`=(?)
+                    ORDER BY `id`");
+        $stmt_select->bind_param('i', $row['id']);
+        $stmt_select->execute();
+        $result_menus = $stmt_select->get_result();
+        $stmt_select->close();
+
+        $j=0;
+        while($row_menus=$result_menus->fetch_assoc())
+        {
+            $data[$i]['menus'][$j]['id'] = $row_menus['id'];
+            $data[$i]['menus'][$j]['title'] = $row_menus['title'];
+            $data[$i]['menus'][$j]['text'] = $row_menus['text'];
+            $data[$i]['menus'][$j]['price'] = $row_menus['price'];
+
+            $j++;
+        }
+
         $i++;
     }
 

@@ -18,7 +18,7 @@ $active_status = 1;
 $stmt_select = mysqli_prepare($db,
     "SELECT
                     `auto_id` as `id`,
-                    `image_name`,
+                    `image_name` as `imagePath`,
                     `title`,
                     `created_at` as `date`
                     FROM `alboms`
@@ -37,8 +37,29 @@ if($result->num_rows>0)
     {
         $data[] = $row;
 
-        $data[$i]['image_name'] = SITE_PATH."/images/alboms/".$row['image_name'];
+        $data[$i]['imagePath'] = SITE_PATH."/images/alboms/".$row['imagePath'];
         $data[$i]['date'] = date("d/m/Y", $row['date']);
+
+        $stmt_select = mysqli_prepare($db,
+            "SELECT
+                    `id`,
+                    `image_name` as `imagePath`
+                    FROM `gallery`
+                    WHERE `albom_id`=(?)
+                    ORDER BY `id`");
+        $stmt_select->bind_param('i', $row['id']);
+        $stmt_select->execute();
+        $result_gallery = $stmt_select->get_result();
+        $stmt_select->close();
+
+        $j=0;
+        while($row_gallery=$result_gallery->fetch_assoc())
+        {
+            $data[$i]['images'][$j]['id'] = $row_gallery['id'];
+            $data[$i]['images'][$j]['imagePath'] = SITE_PATH."/images/gallery/".$row_gallery['imagePath'];
+
+            $j++;
+        }
 
         $i++;
     }

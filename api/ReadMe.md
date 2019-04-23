@@ -16,6 +16,6 @@ Qeyd: Bütün api-lərə GET parametri olaraq, main_lang=4 göndərilsin. (gəl�
 
 7. Menus - http://api.korpus.az/api/sliders_top.php?main_lang=4 || http://api.korpus.az/api/sliders_top.php?main_lang=4&category_id=1
 
-8. Alboms - http://caspilounge.azz/api/alboms.php?main_lang=4
+8. Alboms - http://api.korpus.az/api/alboms.php?main_lang=4
 
-9. Gallery - http://caspilounge.azz/api/gallery.php?main_lang=4 || http://caspilounge.azz/api/gallery.php?main_lang=4&albom_id=1
+9. Gallery - http://api.korpus.az/api/gallery.php?main_lang=4 || http://api.korpus.az/api/gallery.php?main_lang=4&albom_id=1
