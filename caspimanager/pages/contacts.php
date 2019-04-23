@@ -77,20 +77,21 @@ $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do"));
 	<!-- Content start-->
 		<form action="index.php?do=<?php echo $do; ?>" method="post" id="form_login" name="form_login">
 			<?php
-//			$sql=mysqli_query($db,"select * from diller order by sira");
-//			while($row=mysqli_fetch_assoc($sql))
-//			{
-//				$information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where lang_id='$row[id]' "));
-//				if($lang_count>1) echo '<div id="tab'.$row["id"].'_content" class="tab_content '.$hide.'">'; else echo '<div class="'.$hide.'">';
-//				echo 'Text:
-//				<p><textarea name="text_'.$row["id"].'" id="editor'.$df++.'">'.stripslashes($information["text"]).'</textarea></p>
-//
-//				Footer:
-//				<textarea name="footer_'.$row["id"].'" rows="1" cols="1" id="editor'.$df++.'">'.stripslashes($information["footer"]).'</textarea>
-//
-//				<br class="clear" />
-//				</div>';
-//			}
+			$sql=mysqli_query($db,"select * from diller where aktivlik=1 order by sira");
+			while($row=mysqli_fetch_assoc($sql))
+			{
+				$information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where lang_id='$row[id]' "));
+				if($lang_count>1) echo '<div id="tab'.$row["id"].'_content" class="tab_content '.$hide.'">'; else echo '<div class="'.$hide.'">';
+				echo 'Open hours:
+				<p><textarea name="text_'.$row["id"].'" id="editor'.$df++.'">'.stripslashes($information["text"]).'</textarea></p>
+
+				Footer text:
+				<textarea name="footer_'.$row["id"].'" rows="1" cols="1" id="editor'.$df++.'">'.stripslashes($information["footer"]).'</textarea>
+
+				<br class="clear" />
+				</div>';
+			}
+
 			$information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where lang_id='$main_lang' "));
 			?>
 			<div>
@@ -146,9 +147,9 @@ $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do"));
 <!--				Telefon 3:-->
 <!--				<p><input type="text" name="phone" value="--><?php //echo stripslashes($information["phone"]); ?><!--" style="width:300px" /></p>-->
 				
-<!--				Google Map: (Iframe):-->
-<!--				<p><textarea cols="10" rows="15" name="google_map" style="width:300px">--><?//=stripslashes($information["google_map"]); ?><!--</textarea></p>-->
-<!--				<br />-->
+				Google Map: (Iframe):
+				<p><textarea cols="10" rows="15" name="google_map" style="width:300px"><?=stripslashes($information["google_map"]); ?></textarea></p>
+				<br />
 
 				<?php
 //					$sql=mysqli_query($db,"select * from diller order by sira");
