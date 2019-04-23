@@ -83,10 +83,13 @@ $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do"));
 				$information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where lang_id='$row[id]' "));
 				if($lang_count>1) echo '<div id="tab'.$row["id"].'_content" class="tab_content '.$hide.'">'; else echo '<div class="'.$hide.'">';
 				echo 'Open hours:
-				<p><textarea name="text_'.$row["id"].'" id="editor'.$df++.'">'.stripslashes($information["text"]).'</textarea></p>
+				<p><textarea cols="40" rows="5" name="text_'.$row["id"].'">'.stripslashes($information["text"]).'</textarea></p>
 
 				Footer text:
 				<textarea name="footer_'.$row["id"].'" rows="1" cols="1" id="editor'.$df++.'">'.stripslashes($information["footer"]).'</textarea>
+				
+				<br />Address:<br />
+				<textarea cols="40" rows="5" name="address_'.$row["id"].'" rows="1" cols="1">'.stripslashes($information["address"]).'</textarea>
 
 				<br class="clear" />
 				</div>';

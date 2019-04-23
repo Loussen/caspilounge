@@ -12,13 +12,6 @@
         <li><a href="index.php?do=gallery"><img src="images/gallery.png" alt="" width="25"/>Gallery</a></li>
         <li><a href="index.php?do=categories"><img src="images/categories.png" alt="" width="25"/>Menu categories</a></li>
         <li><a href="index.php?do=foods"><img src="images/menus.png" alt="" width="25"/>Menus</a></li>
-        <li><a href="javascript::void(0);">&nbsp;&nbsp;</a></li>
-
-		<li><a href="index.php?do=menus"><img src="images/menus.png" alt="" width="25"/>Menus</a></li>
-		<li><a href="index.php?do=about"><img src="images/about.png" alt="" width="25"/>About</a></li>
-		<li><a href="index.php?do=categories"><img src="images/categories.png" alt="" width="25"/>Categories</a></li>
-		<li><a href="index.php?do=news"><img src="images/news.png" alt="" width="25"/>News</a></li>
-		<li><a href="index.php?do=tags"><img src="images/tags.png" alt="" width="25"/>Tags</a></li>
         <li><a href="index.php?do=contacts"><img src="images/contacts.png" alt="" width="25"/>Contacts</a></li>
 <!--        <li><a href="index.php?do=gallery"><img src="images/gallery.png" alt="" width="25"/>Gallery</a></li>-->
 <!--        <li><a href="index.php?do=slider"><img src="images/sliders.png" alt="" width="25"/>Slider</a></li>-->

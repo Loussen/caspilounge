@@ -12,63 +12,60 @@ include "../caspimanager/pages/includes/config.php";
 
 $response = json_encode(array("status"=>false, "type"=>"gallery", "err" => "Error system"));
 
+$main_lang = mysqli_real_escape_string($db,$_GET['main_lang']);
+$active_status = 1;
 
-    $main_lang = mysqli_real_escape_string($db,$_GET['main_lang']);
-    $active_status = 1;
+if(isset($_GET['albom_id']) && !empty($_GET['albom_id']))
+{
+    $albom_id = intval($_GET['albom_id']);
 
-    if(isset($_GET['albom_id']) && !empty($_GET['albom_id']))
+    $stmt_select = mysqli_prepare($db,
+        "SELECT
+                `gallery`.`id`,
+                `gallery`.`image_name`,
+                `alboms`.`title` as `albomTitle`
+                FROM `gallery`
+                LEFT JOIN `alboms` on `alboms`.`auto_id`=`gallery`.`albom_id`
+                WHERE `gallery`.`albom_id`=(?)
+                ORDER BY `gallery`.`id`");
+    $stmt_select->bind_param('i', $albom_id);
+}
+else
+{
+    $stmt_select = mysqli_prepare($db,
+        "SELECT
+                `gallery`.`id`,
+                `gallery`.`image_name`,
+                `alboms`.`title` as `albomTitle`
+                FROM `gallery`
+                LEFT JOIN `alboms` on `alboms`.`auto_id`=`gallery`.`albom_id`
+                ORDER BY `gallery`.`id`");
+}
+
+$stmt_select->execute();
+$result = $stmt_select->get_result();
+$stmt_select->close();
+
+if($result->num_rows>0)
+{
+    $data = [];
+
+    $i = 0;
+    while($row=$result->fetch_assoc())
     {
-        $albom_id = intval($_GET['albom_id']);
+        $data[] = $row;
 
-        $stmt_select = mysqli_prepare($db,
-            "SELECT
-                    `gallery`.`id`,
-                    `gallery`.`image_name`,
-                    `alboms`.`title` as `albomTitle`
-                    FROM `gallery`
-                    LEFT JOIN `alboms` on `alboms`.`auto_id`=`gallery`.`albom_id`
-                    WHERE `gallery`.`albom_id`=(?)
-                    ORDER BY `gallery`.`id`");
-        $stmt_select->bind_param('i', $albom_id);
-    }
-    else
-    {
-        $stmt_select = mysqli_prepare($db,
-            "SELECT
-                    `gallery`.`id`,
-                    `gallery`.`image_name`,
-                    `alboms`.`title` as `albomTitle`
-                    FROM `gallery`
-                    LEFT JOIN `alboms` on `alboms`.`auto_id`=`gallery`.`albom_id`
-                    ORDER BY `gallery`.`id`");
-    }
+        $data[$i]['image_name'] = SITE_PATH."/images/gallery/".$row['image_name'];
 
-    $stmt_select->execute();
-    $result = $stmt_select->get_result();
-    $stmt_select->close();
-
-    if($result->num_rows>0)
-    {
-        $data = [];
-
-        $i = 0;
-        while($row=$result->fetch_assoc())
-        {
-            $data[] = $row;
-
-            $data[$i]['image_name'] = SITE_PATH."/images/gallery/".$row['image_name'];
-
-            $i++;
-        }
-
-        $response = json_encode(array("status"=>true, "type"=>"gallery", "data" => $data));
-    }
-    else
-    {
-        $response = json_encode(array("status"=>false, "type"=>"gallery", "data" => "Not found"));
+        $i++;
     }
 
-
+    $response = json_encode(array("status"=>true, "type"=>"gallery", "data" => $data));
+}
+else
+{
+    $response = json_encode(array("status"=>false, "type"=>"gallery", "data" => "Not found"));
+}
 
 echo $response;
 

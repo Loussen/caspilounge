@@ -15,7 +15,6 @@ $response = json_encode(array("status"=>false, "type"=>"menus", "err" => "Error 
 $main_lang = mysqli_real_escape_string($db,$_GET['main_lang']);
 $active_status = 1;
 
-
 if(isset($_GET['category_id']) && !empty($_GET['category_id']))
 {
     $category_id = intval($_GET['category_id']);
