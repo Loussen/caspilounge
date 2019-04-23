@@ -10,7 +10,7 @@ header("Content-Type: application/json; charset=UTF-8");
 
 include "../caspimanager/pages/includes/config.php";
 
-$response = json_encode(array("status"=>false, "type"=>"sliders_top", "err" => "Error system"));
+$response = json_encode(array("status"=>false, "type"=>"sliders_middle", "err" => "Error system"));
 
 $main_lang = mysqli_real_escape_string($db,$_GET['main_lang']);
 $active_status = 1;
@@ -18,10 +18,8 @@ $active_status = 1;
 $stmt_select = mysqli_prepare($db,
     "SELECT
                     `image_name`,
-                    `title`,
-                    `button_text` as `buttonText`,
-                    `button_link` as `buttonLink`
-                    FROM `sliders`
+                    `link`
+                    FROM `sliders2nd`
                     WHERE `lang_id`=(?) and `active`=(?)
                     ORDER BY `order_number`");
 $stmt_select->bind_param('ii', $main_lang,$active_status);
@@ -37,16 +35,16 @@ if($result->num_rows>0)
     {
         $data[] = $row;
 
-        $data[$i]['image_name'] = SITE_PATH."/images/sliders/".$row['image_name'];
+        $data[$i]['image_name'] = SITE_PATH."/images/sliders2nd/".$row['image_name'];
 
         $i++;
     }
 
-    $response = json_encode(array("status"=>true, "type"=>"sliders_top", "data" => $data));
+    $response = json_encode(array("status"=>true, "type"=>"sliders_middle", "data" => $data));
 }
 else
 {
-    $response = json_encode(array("status"=>false, "type"=>"sliders_top", "data" => "Not found"));
+    $response = json_encode(array("status"=>false, "type"=>"sliders_middle", "data" => "Not found"));
 }
 
 echo $response;
