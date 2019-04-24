@@ -21,3 +21,5 @@ Qeyd: Bütün api-lərə GET parametri olaraq, main_lang=4 göndərilsin. (gəl�
 9. Gallery - http://api.korpus.az/api/gallery.php?main_lang=4 || http://api.korpus.az/api/gallery.php?main_lang=4&albom_id=1
 
 10. Contacts - http://api.korpus.az/api/contacts.php?main_lang=4
+
+11. Catering form - http://api.korpus.az/api/catering.php - { "name" : "Fuad", "surname" : "Hasanli", "month" : "05", "day" : "02", "year" : "2019", "email" : "fhesenli92@gmail.com", "subject" : "Salam", "message" : "Salam salam" }

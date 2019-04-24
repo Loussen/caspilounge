@@ -36,7 +36,8 @@ $stmt_select = mysqli_prepare($db,
                     `image_name`,
                     `title`,
                     `short_text` as `shortText`,
-                    `text`
+                    `text`,
+                    `created_at` as `date`
                     FROM `pevents`
                     WHERE `lang_id`=(?) and `active`=(?)
                     ORDER BY `order_number`");
@@ -54,6 +55,7 @@ if($result->num_rows>0)
         $data[] = $row;
 
         $data[$i]['image_name'] = SITE_PATH."/images/pevents/".$row['image_name'];
+        $data[$i]['date'] = date("d/m/Y", $row['date']);
 
         $i++;
     }
