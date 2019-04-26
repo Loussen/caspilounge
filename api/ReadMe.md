@@ -25,3 +25,21 @@ Qeyd: Bütün api-lərə GET parametri olaraq, main_lang=4 göndərilsin. (gəl�
 11. Catering form - http://api.korpus.az/api/catering.php - { "name" : "Fuad", "surname" : "Hasanli", "month" : "05", "day" : "02", "year" : "2019", "email" : "fhesenli92@gmail.com", "subject" : "Salam", "message" : "Salam salam" }
 
 12. http://api.korpus.az/api/init.php - HTTP_SECRET - key: secret, value: token
+
+13. http://api.korpus.az/api/add_cart.php - { "food_id" : 12, "special req" : "With sous", "quantity" : 2, "token" : token }
+
+14. http://api.korpus.az/api/update_cart.php - { "food_id" : 12, "special_req" : "With sous updated", "quantity" : 3, "token" : token }
+
+15. http://api.korpus.az/api/delete_cart.php - { "food_id" : 12, "token" : token }
+
+16. http://api.korpus.az/api/delete_all_cart.php - { "token" : token }
+
+17. http://api.korpus.az/api/order_special_req.php - { "special_req" : "Please quite", "token" : token }
+
+18. http://api.korpus.az/api/add_contacts.php - { "city" : "Baku", "no" : "15", "floor" : "5", "street" : "Resid Behbudov", "apt" : "Residence", "firstname" : "Fuad", "lastname" : "Hasanli", "phone" : "+994506877836", "email" : "fhesenli92@gmail.com", "token" : token }
+
+19. http://api.korpus.az/api/update_contacts.php - { "city" : "Baku", "no" : "15", "floor" : "5", "street" : "Resid Behbudov", "apt" : "Residence", "firstname" : "Fuad", "lastname" : "Hasanli", "phone" : "+994506877836", "email" : "fhesenli92@gmail.com", "token" : token }
+
+20. http://api.korpus.az/api/confirm_order.php - { "pay_type" : 1, "token" : token }
+
+21. http://api.korpus.az/api/get_cart.php - { "token" : token }
