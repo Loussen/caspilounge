@@ -26,7 +26,7 @@ Qeyd: Bütün api-lərə GET parametri olaraq, main_lang=4 göndərilsin. (gəl�
 
 12. http://api.korpus.az/api/init.php - HTTP_SECRET - key: secret, value: token
 
-13. http://api.korpus.az/api/add_cart.php - { "food_id" : 12, "special _req" : "With sous", "quantity" : 2, "token" : token }
+13. http://api.korpus.az/api/add_cart.php - { "food_id" : 12, "special_req" : "With sous", "quantity" : 2, "token" : token }
 
 14. http://api.korpus.az/api/update_cart.php - { "food_id" : 12, "special_req" : "With sous updated", "quantity" : 3, "token" : token }
 

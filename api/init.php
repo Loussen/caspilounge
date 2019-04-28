@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
     exit(0);
 }
 
+
 if(isset($_SERVER['HTTP_SECRET']) && !empty($_SERVER['HTTP_SECRET']) && $_SERVER['HTTP_SECRET']!='null')
 {
     $response = json_encode(array("status"=>true, "type"=>"token", "token" => $_SERVER['HTTP_SECRET']));
