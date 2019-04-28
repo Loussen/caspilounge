@@ -57,9 +57,9 @@ if($result->num_rows>0)
                     `text`,
                     `price`
                     FROM `foods`
-                    WHERE `cat_id`=(?)
-                    ORDER BY `id`");
-        $stmt_select->bind_param('i', $row['id']);
+                    WHERE `cat_id`=(?) and `active`=(?) and `lang_id`=(?)
+                    ORDER BY `order_number`");
+        $stmt_select->bind_param('iii', $row['id'],$active_status,$main_lang);
         $stmt_select->execute();
         $result_menus = $stmt_select->get_result();
         $stmt_select->close();
