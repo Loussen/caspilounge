@@ -131,22 +131,22 @@ if($phpInput)
                                   <tr>
                                     <td style="border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;">'.$data['name'].'</td>
+  padding: 8px;">'.safe($data['name']).'</td>
                                     <td style="border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;">'.$data['surname'].'</td>
+  padding: 8px;">'.safe($data['surname']).'</td>
                                     <td style="border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;">'.$data['month'].'/'.$data['day'].'/'.$data['year'].'</td>
+  padding: 8px;">'.safe($data['month']).'/'.safe($data['day']).'/'.safe($data['year']).'</td>
                                     <td style="border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;">'.$data['email'].'</td>
+  padding: 8px;">'.safe($data['email']).'</td>
                                     <td style="border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;">'.$data['subject'].'</td>
+  padding: 8px;">'.safe($data['subject']).'</td>
                                     <td style="border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;">'.$data['message'].'</td>
+  padding: 8px;">'.safe($data['message']).'</td>
                                   </tr>
                                 </table>';
 

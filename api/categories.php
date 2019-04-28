@@ -69,7 +69,7 @@ if($result->num_rows>0)
         {
             $data[$i]['menus'][$j]['id'] = $row_menus['id'];
             $data[$i]['menus'][$j]['title'] = $row_menus['title'];
-            $data[$i]['menus'][$j]['text'] = $row_menus['text'];
+            $data[$i]['menus'][$j]['text'] = html_entity_decode($row_menus['text']);
             $data[$i]['menus'][$j]['price'] = $row_menus['price'];
 
             $j++;
