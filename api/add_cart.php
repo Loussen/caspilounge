@@ -87,17 +87,49 @@ if($phpInput)
 
             $special_req_cart = safe($data['special_req']);
 
-            $stmt_insert = mysqli_prepare($db, "INSERT INTO `cart` (`order_id`,`food_id`,`quantity`,`special_req`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?)");
-            $stmt_insert->bind_param('iiisii', $order_id,$food_id,$quantity,$special_req_cart,$created_at,$updated_at);
-            $insert = $stmt_insert->execute();
+            $stmt_select = mysqli_prepare($db,
+                "SELECT
+                    `id`,
+                    `quantity`
+                    FROM `cart`
+                    WHERE `order_id`=(?) and `food_id`=(?) LIMIT 1");
+            $stmt_select->bind_param('ii', $order_id,$food_id);
+            $stmt_select->execute();
+            $stmt_select->bind_result($cart_id,$quantity_row);
+            $stmt_select->store_result();
+            $stmt_select->fetch();
 
-            if($insert==1)
+            if($stmt_select->num_rows==1 && $cart_id>0)
             {
-                $response = json_encode(array("status"=>true, "type"=>"add_cart", "message" => "Success"));
+                $quantity_new = $quantity_row+$quantity;
+                $updated_at = time();
+                $stmt_update = mysqli_prepare($db, "UPDATE `cart` SET `quantity`=(?),`special_req`=(?),`updated_at`=(?) WHERE `order_id`=(?) and `food_id`=(?)");
+                $stmt_update->bind_param('isiii', $quantity_new,$special_req,$updated_at,$order_id,$food_id);
+                $update = $stmt_update->execute();
+
+                if($update==1)
+                {
+                    $response = json_encode(array("status"=>true, "type"=>"update_cart", "message" => "Success"));
+                }
+                else
+                {
+                    $response = json_encode(array("status"=>false, "type"=>"update_cart", "err" => "Error cart update"));
+                }
             }
             else
             {
-                $response = json_encode(array("status"=>false, "type"=>"add_cart", "err" => "Error cart insert"));
+                $stmt_insert = mysqli_prepare($db, "INSERT INTO `cart` (`order_id`,`food_id`,`quantity`,`special_req`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?)");
+                $stmt_insert->bind_param('iiisii', $order_id,$food_id,$quantity,$special_req_cart,$created_at,$updated_at);
+                $insert = $stmt_insert->execute();
+
+                if($insert==1)
+                {
+                    $response = json_encode(array("status"=>true, "type"=>"add_cart", "message" => "Success"));
+                }
+                else
+                {
+                    $response = json_encode(array("status"=>false, "type"=>"add_cart", "err" => "Error cart insert"));
+                }
             }
         }
     }

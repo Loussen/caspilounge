@@ -32,7 +32,7 @@ $active_status = 1;
 
 $stmt_select = mysqli_prepare($db,
     "SELECT
-                    `auto_id` as `id`,
+                    `auto_id` as `category_id`,
                     `name`
                     FROM `categories`
                     WHERE `lang_id`=(?) and `active`=(?)
@@ -52,14 +52,14 @@ if($result->num_rows>0)
 
         $stmt_select = mysqli_prepare($db,
             "SELECT
-                    `auto_id` as `id`,
+                    `auto_id` as `food_id`,
                     `title`,
                     `text`,
                     `price`
                     FROM `foods`
                     WHERE `cat_id`=(?) and `active`=(?) and `lang_id`=(?)
                     ORDER BY `order_number`");
-        $stmt_select->bind_param('iii', $row['id'],$active_status,$main_lang);
+        $stmt_select->bind_param('iii', $row['category_id'],$active_status,$main_lang);
         $stmt_select->execute();
         $result_menus = $stmt_select->get_result();
         $stmt_select->close();
@@ -67,7 +67,7 @@ if($result->num_rows>0)
         $j=0;
         while($row_menus=$result_menus->fetch_assoc())
         {
-            $data[$i]['menus'][$j]['id'] = $row_menus['id'];
+            $data[$i]['menus'][$j]['food_id'] = $row_menus['food_id'];
             $data[$i]['menus'][$j]['title'] = $row_menus['title'];
             $data[$i]['menus'][$j]['text'] = html_entity_decode($row_menus['text']);
             $data[$i]['menus'][$j]['price'] = $row_menus['price'];

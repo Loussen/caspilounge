@@ -49,7 +49,7 @@ if(isset($_SERVER['HTTP_SECRET']) && !empty($_SERVER['HTTP_SECRET']))
     {
         $stmt_select = mysqli_prepare($db,"SELECT 
                                                 `cart`.`id` as `cart_id`,
-                                                `cart`.`food_id` as `food_id`,
+                                                `foods`.`auto_id` as `food_id`,
                                                 `cart`.`quantity` as `quantity`,
                                                 `cart`.`special_req` as `special_req`,
                                                 `foods`.`title` as `title`,
@@ -58,7 +58,7 @@ if(isset($_SERVER['HTTP_SECRET']) && !empty($_SERVER['HTTP_SECRET']))
                                                 FROM `cart`
                                                 INNER JOIN `foods` on `foods`.`auto_id`=`cart`.`food_id`
                                                  WHERE `cart`.`order_id`=(?) and `foods`.`active`=(?) and `foods`.`lang_id`=(?)
-                                                 ORDER BY `foods`.`order_number`
+                                                 ORDER BY `cart`.`id` DESC 
                                                  ");
         $stmt_select->bind_param('iii', $order_id,$active_status,$main_lang);
         $stmt_select->execute();
@@ -73,9 +73,12 @@ if(isset($_SERVER['HTTP_SECRET']) && !empty($_SERVER['HTTP_SECRET']))
             {
                 $data[] = $row;
 
+                $data[$i]['food_id'] = $row['food_id'];
                 $data[$i]['title'] = $row['title'];
                 $data[$i]['text'] = html_entity_decode($row['text']);
                 $data[$i]['price'] = $row['price'];
+
+                $i++;
             }
 
             $response = json_encode(array("status"=>true, "type"=>"get_cart", "data" => $data));
