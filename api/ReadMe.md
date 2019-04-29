@@ -32,8 +32,8 @@ Qeyd: Bütün api-lərə GET parametri olaraq, main_lang=4 göndərilsin. (gəl�
 
 15. http://api.korpus.az/api/delete_cart.php - { "food_id" : 12 } - Send header secret key +
 
-16. http://api.korpus.az/api/delete_all_cart.php - { "token" : token }
+16. http://api.korpus.az/api/delete_all_cart.php - Send header secret
 
-17. http://api.korpus.az/api/confirm_order.php - { "city" : "Baku", "no" : "15", "floor" : "5", "street" : "Resid Behbudov", "apt" : "Residence", "firstname" : "Fuad", "lastname" : "Hasanli", "phone" : "+994506877836", "email" : "fhesenli92@gmail.com", "pay_type" : 1, "special_req" : "Please quite" } - Send header secret
+17. http://api.korpus.az/api/confirm_order.php - { "city" : "Baku", "no" : "15", "floor" : "5", "street" : "Resid Behbudov", "apt" : "Residence", "firstname" : "Fuad", "lastname" : "Hasanli", "phone" : "+994506877836", "email" : "fhesenli92@gmail.com", "pay_type" : 1, "special_req" : "Please quite" } - Send header secret +
 
 18. http://api.korpus.az/api/get_cart.php?main_lang=4 - { "token" : token } +
