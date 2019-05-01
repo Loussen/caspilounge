@@ -18,6 +18,7 @@
 <div class="form-container">
     <form method="post" action="checkout.php">
         <input name="amount" type="text" value="5.00" />
+<!--        <input type="text" name="nonce" value="fake-card-nonce-ok" />-->
         <button type="submit">Pay now!</button>
     </form>
 </div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c4c908750cfc6b5ee58fb3e0ad12f6c",
+    "content-hash": "3c6d86620ac8afa028cda342e02f5874",
     "packages": [
         {
             "name": "phpoption/phpoption",
@@ -58,16 +58,16 @@
         },
         {
             "name": "square/connect",
-            "version": "2.20190410.0",
+            "version": "2.20190410.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/square/connect-php-sdk.git",
-                "reference": "30916765ca4e08e480a93e64ea67b6d006126b78"
+                "reference": "601485d86634286b2d19eb2939b87944176769e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/square/connect-php-sdk/zipball/30916765ca4e08e480a93e64ea67b6d006126b78",
-                "reference": "30916765ca4e08e480a93e64ea67b6d006126b78",
+                "url": "https://api.github.com/repos/square/connect-php-sdk/zipball/601485d86634286b2d19eb2939b87944176769e1",
+                "reference": "601485d86634286b2d19eb2939b87944176769e1",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
                 "sdk",
                 "swagger"
             ],
-            "time": "2019-04-10T20:57:11+00:00"
+            "time": "2019-04-24T17:54:11+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

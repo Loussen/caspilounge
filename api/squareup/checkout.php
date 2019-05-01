@@ -34,11 +34,12 @@ if (isset($_POST["amount"]) && !empty($_POST["amount"])) {
                                 "amount" => intval($_POST["amount"] * 100),
                                 "currency" => "USD"
                             ]
-                        ]]
+                        ]
+                    ]
                 ]
             ]
         );
-        $response = $checkout_api->createCheckout($location_id, $request_body);
+        $response = $checkout_api->createCheckout($location_id, $request_body)  ;
     } catch (Exception $e) {
         // if an error occurs, output the message
         echo $e->getMessage();

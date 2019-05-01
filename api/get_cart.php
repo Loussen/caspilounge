@@ -54,7 +54,8 @@ if(isset($_SERVER['HTTP_SECRET']) && !empty($_SERVER['HTTP_SECRET']))
                                                 `cart`.`special_req` as `special_req`,
                                                 `foods`.`title` as `title`,
                                                 `foods`.`text` as `text`,
-                                                `foods`.`price` as `price`
+                                                `foods`.`price` as `price`,
+                                                `cart`.`total` as `total`
                                                 FROM `cart`
                                                 INNER JOIN `foods` on `foods`.`auto_id`=`cart`.`food_id`
                                                  WHERE `cart`.`order_id`=(?) and `foods`.`active`=(?) and `foods`.`lang_id`=(?)
