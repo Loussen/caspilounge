@@ -1,3 +1,21 @@
+<style>
+    table.info_table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table.info_table td, table.info_table th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        text-align: center;
+    }
+
+    table.info_table tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
 <?php
 // Paginator
 $limit=intval($_GET["limit"]);
@@ -11,6 +29,7 @@ $start=$page*$limit-$limit;
 
 $add=intval($_GET["add"]);
 $edit=intval($_GET["edit"]);
+$view=intval($_GET["view"]);
 $delete=intval($_GET["delete"]);
 $up=intval($_GET["up"]);
 $down=intval($_GET["down"]);
@@ -110,10 +129,12 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         <form action="index.php?do=<?php echo $do; ?>&page=<?php echo $page; if($edit>0) echo '&edit='.$edit; ?>" method="post" id="form_login" name="form_login" enctype="multipart/form-data">
             <a href="index.php?do=<?php echo $do; ?>&add=1" style="margin-right:50px"><img src="images/icon_add.png" alt="" /> <b style="">Create new</b></a>
             <hr class="clear" />
+
             <?php
                 if($add==1 || $edit>0) $hide=""; else $hide="hide";
+                if($view>0) $hide=""; else $hide="hide";
 
-                $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where id='$edit'"));
+                $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where id='$view'"));
 
                 // Get customer
                 $customer_sql = mysqli_query($db,"select * from customers where id='$information[customer_id]'");
@@ -236,7 +257,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                     echo '<tr>
                             <td>'.$row['cart_id'].'</td>
                             <td>'.$row['food_id'].'</td>
-                            <td contenteditable="true">'.$row['quantity'].'</td>
+                            <td>'.$row['quantity'].'</td>
                             <td>'.$row['special_req'].'</td>
                             <td>'.$row['title'].'</td>
                             <td>'.$row['price'].' USD</td>
@@ -256,6 +277,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                         </tr>';
 
                 echo '</table></div><br />';
+                exit;
             }
                 echo '<input type="submit" id="save" name="button" value=" Save " />
                   <hr class="clear" />
@@ -332,7 +354,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
 					<td>'.$created_at.'</td>
 					<td>'.$status.'</td>
 					<td>
-                        <a href="index.php?do='.$do.'&page='.$page.'&edit='.$row["id"].'"><img src="images/icon_eye.png" alt="" title="View" /></a>
+                        <a target="_blank" href="index.php?do='.$do.'&page='.$page.'&view='.$row["id"].'"><img src="images/icon_eye.png" alt="" title="View" /></a>
 						<a href="index.php?do='.$do.'&page='.$page.'&edit='.$row["id"].'"><img src="images/icon_edit.png" alt="" title="Edit" /></a>
 						<a href="index.php?do='.$do.'&page='.$page.'&delete='.$row["id"].'" class="delete"><img src="images/icon_delete.png" alt="" title="Sil" /></a>';
             echo '</td>
@@ -368,22 +390,5 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
     table.data tr th, table.data tr th
     {
         text-align: center;
-    }
-
-    table.info_table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    table.info_table td, table.info_table th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-        text-align: center;
-    }
-
-    table.info_table tr:nth-child(even) {
-        background-color: #dddddd;
     }
 </style>
