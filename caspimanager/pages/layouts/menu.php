@@ -5,6 +5,8 @@
 		<li><a href="<?=SITE_PATH.'/caspimanager'?>"><img src="images/home.png" alt="" width="25"/>Home</a></li>
         <li><a href="index.php?do=sliders"><img src="images/sliders.png" alt="" width="25"/>Sliders top</a></li>
         <li><a href="index.php?do=orders"><img src="images/pevents.png" alt="" width="25"/>Orders</a></li>
+        <li><a href="index.php?do=cart"><img src="images/cart.png" alt="" width="25"/>Cart</a></li>
+        <li><a href="index.php?do=customers"><img src="images/customers.png" alt="" width="25"/>Customers</a></li>
         <li><a href="index.php?do=pevents"><img src="images/pevents.png" alt="" width="25"/>Private events</a></li>
         <li><a href="index.php?do=sliders2nd"><img src="images/sliders.png" alt="" width="25"/>Sliders middle</a></li>
         <li><a href="index.php?do=sliders3rd"><img src="images/sliders.png" alt="" width="25"/>Sliders bottom</a></li>

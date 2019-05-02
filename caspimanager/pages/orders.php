@@ -66,9 +66,10 @@ if($_POST) // Add && edit
 
         $time = time();
 
-        if(mysqli_num_rows(mysqli_query($db,"select id from $do where lang_id='$row[id]' $add_where"))>0 && $edit>0)
+        if(mysqli_num_rows(mysqli_query($db,"select id from $do where 1=1 $add_where"))>0 && $edit>0)
         {
-            mysqli_query($db,"update $do set title='$title',short_text='$short_text',text='$text',updated_at='$time' where lang_id='$row[id]' $add_where");
+            $payment_date = mktime($hour,$minute,00,$month,$day,$year);
+            mysqli_query($db,"update $do set payment_date='$payment_date',status='$status',paid='$paid',special_req='$special_req',updated_at='$time' where 1=1 $add_where");
         }
         else
         {
@@ -132,7 +133,120 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
 
             <?php
                 if($add==1 || $edit>0) $hide=""; else $hide="hide";
-                if($view>0) $hide=""; else $hide="hide";
+                if($view>0) $hide_view=""; else $hide_view="hide";
+
+                $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where id='$edit'"));
+
+                if($information['payment_date']>0)
+                {
+                    $year = date("Y",$information['payment_date']);
+                    $month = date("m",$information['payment_date']);
+                    $day = date("d",$information['payment_date']);
+                    $hour = date("H",$information['payment_date']);
+                    $minute = date("i",$information['payment_date']);
+                }
+                else
+                {
+                    $year = $month = $day = $hour = $minute = 0;
+                }
+
+                echo '<div class="'.$hide.'">';
+                echo 'Payment date (Y-m-d H:i) : <br />';
+                ?>
+                <select name="year">
+                    <?php
+                        for ($i=2019;$i<=2030;$i++)
+                        {
+                            $selected = ($year==$i) ? 'selected' : '';
+                            ?>
+                            <option <?=$selected?> value="<?=$i?>"><?=$i?></option>
+                            <?php
+                        }
+                    ?>
+                </select> -
+                <select name="month">
+                    <?php
+                    for ($i=1;$i<=12;$i++)
+                    {
+                        $delimeter = ($i<10) ? '0' : '';
+                        $selected = ($month==$i) ? 'selected' : '';
+                        ?>
+                        <option <?=$selected?> value="<?=$i?>"><?=$delimeter.$i?></option>
+                        <?php
+                    }
+                    ?>
+                </select> -
+                <select name="day">
+                    <?php
+                    for ($i=1;$i<=31;$i++)
+                    {
+                        $delimeter = ($i<10) ? '0' : '';
+                        $selected = ($day==$i) ? 'selected' : '';
+                        ?>
+                        <option <?=$selected?> value="<?=$i?>"><?=$delimeter.$i?></option>
+                        <?php
+                    }
+                    ?>
+                </select>&nbsp;&nbsp;
+                <select name="hour">
+                    <?php
+                    for ($i=0;$i<=24;$i++)
+                    {
+                        $delimeter = ($i<10) ? '0' : '';
+                        $selected = ($hour==$i) ? 'selected' : '';
+                        ?>
+                        <option <?=$selected?> value="<?=$i?>"><?=$delimeter.$i?></option>
+                        <?php
+                    }
+                    ?>
+                </select>
+                 :
+                <select name="minute">
+                    <?php
+                    for ($i=0;$i<=24;$i++)
+                    {
+                        $delimeter = ($i<10) ? '0' : '';
+                        $selected = ($minute==$i) ? 'selected' : '';
+                        ?>
+                        <option <?=$selected?> value="<?=$i?>"><?=$delimeter.$i?></option>
+                        <?php
+                    }
+                    ?>
+                </select>
+                <br /><br />
+                Status <br />
+                <select name="status">
+                    <?php
+                    $status_arr = [0=>'Deactive',1=>'Active',2=>'Shipping',3=>'Delivered'];
+                    foreach ($status_arr as $key=>$value)
+                    {
+                        $selected = ($key==$information['status']) ? 'selected' : '';
+                        ?>
+                        <option <?=$selected?> value="<?=$key?>"><?=$value?></option>
+                        <?php
+                    }
+                    ?>
+                </select><br /><br />
+                Paid <br />
+                <select name="paid">
+                    <?php
+                    $paid_arr = [0=>'No',1=>'Yes'];
+                    foreach ($paid_arr as $key=>$value)
+                    {
+                        $selected = ($key==$information['paid']) ? 'selected' : '';
+                        ?>
+                        <option <?=$selected?> value="<?=$key?>"><?=$value?></option>
+                        <?php
+                    }
+                    ?>
+                </select><br /><br />
+                Special request : <br />
+                <textarea name="special_req" cols="50" rows="5"><?=$information["special_req"]?></textarea><br /><br />
+                <?php
+                         echo '<br /><br />';
+                echo '<input type="submit" id="save" name="button" value=" Save " />
+                      <hr class="clear" />
+                      <br class="clear" /></div>';
 
                 $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where id='$view'"));
 
@@ -149,7 +263,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                     $customer_found = false;
                 }
 
-                echo '<div class="'.$hide.'">';
+                echo '<div class="'.$hide_view.'">';
                 echo '<div style="border: 1px solid #ddd; padding: 5px;"><h2 align="center">Customer info</h2>
                     <table class="info_table">
                         <tr>
@@ -205,6 +319,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                             <th>Pay status</th>
                             <th>Special request</th>
                             <th>Order date</th>
+                            <th>Editing</th>
                         </tr>
                         <tr>
                             <td>'.$pay_type.'</td>
@@ -213,6 +328,8 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                             <td>'.$paid.'</td>
                             <td>'.$information['special_req'].'</td>
                             <td>'.$created_at.'</td>
+                            <td><a target="_blank" href="index.php?do='.$do.'&page='.$page.'&edit='.$information["id"].'"><img src="images/icon_edit.png" alt="" title="Edit" /></a>
+						<a target="_blank" href="index.php?do='.$do.'&page='.$page.'&delete='.$information["id"].'" class="delete"><img src="images/icon_delete.png" alt="" title="Sil" /></a></td>
                         </tr>
                     </table></div><br />';
 
@@ -255,8 +372,8 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                 while($row=$result->fetch_assoc())
                 {
                     echo '<tr>
-                            <td>'.$row['cart_id'].'</td>
-                            <td>'.$row['food_id'].'</td>
+                            <td><a target="_blank" href="index.php?do=cart&edit='.$row['cart_id'].'">'.$row['cart_id'].'</a></td>
+                            <td><a target="_blank" href="index.php?do=foods&edit='.$row['food_id'].'">'.$row['food_id'].'</a></td>
                             <td>'.$row['quantity'].'</td>
                             <td>'.$row['special_req'].'</td>
                             <td>'.$row['title'].'</td>
