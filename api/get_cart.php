@@ -55,7 +55,8 @@ if(isset($_SERVER['HTTP_SECRET']) && !empty($_SERVER['HTTP_SECRET']))
                                                 `foods`.`title` as `title`,
                                                 `foods`.`text` as `text`,
                                                 `foods`.`price` as `price`,
-                                                `cart`.`total` as `total`
+                                                `cart`.`total` as `total`,
+                                                `cart`.`order_id` as `order_id`
                                                 FROM `cart`
                                                 INNER JOIN `foods` on `foods`.`auto_id`=`cart`.`food_id`
                                                  WHERE `cart`.`order_id`=(?) and `foods`.`active`=(?) and `foods`.`lang_id`=(?)
@@ -82,7 +83,7 @@ if(isset($_SERVER['HTTP_SECRET']) && !empty($_SERVER['HTTP_SECRET']))
                 $i++;
             }
 
-            $response = json_encode(array("status"=>true, "type"=>"get_cart", "data" => $data));
+            $response = json_encode(array("status"=>true, "type"=>"get_cart", "data" => $data, "order_id" => $data[0]['order_id']));
         }
         else
         {

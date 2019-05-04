@@ -8,10 +8,10 @@
 	<div id="search">
 		<p style="margin-top:-4px;margin-left:-5px;color:#000000">
 			<?php
-			$sql=mysqli_query($db,"select * from diller order by sira");
-			while($row=mysqli_fetch_assoc($sql)){
-				echo '&nbsp;&nbsp;<a href="index.php?lang='.$row["id"].'" style="color:darkgreen">'.$row["tam_adi"].'</a>';
-			}
+//			$sql=mysqli_query($db,"select * from diller order by sira");
+//			while($row=mysqli_fetch_assoc($sql)){
+//				echo '&nbsp;&nbsp;<a href="index.php?lang='.$row["id"].'" style="color:darkgreen">'.$row["tam_adi"].'</a>';
+//			}
 			?>
 			<a href="logout.php" style="color:#000000"><img align="middle" src="images/logout.png" alt="" style="margin-left:10px;margin-bottom:-15px" /> <span style="vertical-align: -webkit-baseline-middle;">Logout</span></a>
 		</p>

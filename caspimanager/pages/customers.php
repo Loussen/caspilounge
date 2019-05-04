@@ -1,13 +1,53 @@
 <?php
+// Get params for filters
+$email = $_GET['email'];
+$firstname = $_GET['firstname'];
+$lastname = $_GET['lastname'];
+$phone = $_GET['phone'];
+$datetimes = $_GET['datetimes'];
+
 // Paginator
 $limit=intval($_GET["limit"]);
 if($limit!=15 && $limit!=25 && $limit!=50 && $limit!=100 && $limit!=999999) $limit=15;
-$query_count="select id from $do ";
+$query_count="select id from $do where 1=1";
+
+// Filters
+$add_information_sql = "";
+if(strlen($email)>0)
+{
+    $query_count.=" and email LIKE '%$email%' ";
+    $add_information_sql .= " and email LIKE '%$email%' ";
+}
+if(strlen($firstname)>0)
+{
+    $query_count.=" and firstname LIKE '%$firstname%' ";
+    $add_information_sql .= " and firstname LIKE '%$firstname%' ";
+}
+if(strlen($lastname)>0)
+{
+    $query_count.=" and lastname LIKE '%$lastname%' ";
+    $add_information_sql .= " and lastname LIKE '%$lastname%' ";
+}
+if(strlen($phone)>0)
+{
+    $query_count.=" and phone LIKE '%$phone%' ";
+    $add_information_sql .= " and phone LIKE '%$phone%' ";
+}
+if(strlen($datetimes)>0)
+{
+    $datetime = explode("-",$datetimes);
+
+    $fromDate = strtotime($datetime[0]);
+    $toDate = strtotime($datetime[1]);
+
+    $query_count.=" and created_at>='$fromDate' and created_at<='$toDate' ";
+    $add_information_sql .= " and created_at>='$fromDate' and created_at<='$toDate' ";
+}
+
 $count_rows=mysqli_num_rows(mysqli_query($db,$query_count));
 $max_page=ceil($count_rows/$limit);
 $page=intval($_GET["page"]); if($page<1) $page=1; if($page>$max_page) $page=$max_page; if($page<1) $page=1;
 $start=$page*$limit-$limit;
-//
 
 $add=intval($_GET["add"]);
 $edit=intval($_GET["edit"]);
@@ -118,6 +158,41 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                     <option value="index.php?<?=addFullUrl(array('limit'=>999999,'page'=>0))?>" <?php if($limit==999999) echo 'selected="selected"'; ?>>ALL</option>
                 </select>
             </div>
+
+            <div>
+                <form method="get">
+                    <input type="hidden" name="do" value="<?=$do?>">
+                    <input type="text" name="email" placeholder="email" value="<?=$email?>">
+                    <input type="text" name="firstname" placeholder="firstname" value="<?=$firstname?>">
+                    <input type="text" name="lastname" placeholder="lastname" value="<?=$lastname?>">
+                    <input type="text" name="phone" placeholder="phone" value="<?=$phone?>">
+                    <input type="text" name="datetimes" autocomplete="off" placeholder="date range" style="width: 250px;" value="<?=$datetimes?>" />
+
+                    <script>
+                        $(function() {
+                            $('input[name="datetimes"]').daterangepicker({
+                                timePicker: true,
+                                // startDate: moment().startOf('hour'),
+                                // endDate: moment().startOf('hour').add(32, 'hour'),
+                                locale: {
+                                    format: 'M/DD/YYYY hh:mm A'
+                                },
+                                autoUpdateInput: false
+                            });
+
+                            $('input[name="datetimes"]').on('apply.daterangepicker', function(ev, picker) {
+                                $(this).val(picker.startDate.format('M/DD/YYYY hh:mm A') + ' - ' + picker.endDate.format('M/DD/YYYY hh:mm A'));
+                            });
+
+                            $('input[name="datetimes"]').on('cancel.daterangepicker', function(ev, picker) {
+                                $(this).val('');
+                            });
+                        });
+                    </script>
+                    <button class="alert_success" type="submit">Search</button>
+                </form>
+            </div>
+
         </div>
 
         <br class="clear" />
@@ -133,7 +208,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
 </tr></thead><tbody>';
         $query=str_replace("select id ","select * ",$query_count);
         $query.=" order by auto_id desc limit $start,$limit";
-        $sql=mysqli_query($db,"select * from $do order by created_at desc limit $start,$limit");
+        $sql=mysqli_query($db,"select * from $do where 1=1 ".$add_information_sql." order by created_at desc limit $start,$limit");
         $i = $start+1;
         while($row=mysqli_fetch_assoc($sql))
         {
@@ -157,18 +232,25 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         ?>
         <div class="ps_"><?=page_nav()?></div>
         <?php
+            $get_param = '';
+            $get_param .= (strlen($email)>0) ? '&email='.$email : '';
+            $get_param .= (strlen($firstname)>0) ? '&firstname='.$firstname : '';
+            $get_param .= (strlen($lastname)>0) ? '&lastname='.$lastname : '';
+            $get_param .= (strlen($phone)>0) ? '&phone='.$phone : '';
+            $get_param .= (strlen($datetimes)>0) ? '&datetimes='.$datetimes : '';
+
             // Paginator
             echo '<div class="pagination">';
             $show=3;
-            if($page>$show+1) echo '<a href="index.php?do='.$do.'&page=1">First page</a>';
-            if($page>1) echo '<a href="index.php?do='.$do.'&page='.($page-1).'">Previous page</a>';
+            if($page>$show+1) echo '<a href="index.php?do='.$do.'&page=1'.$get_param.'">First page</a>';
+            if($page>1) echo '<a href="index.php?do='.$do.'&page='.($page-1).$get_param.'">Previous page</a>';
             for($i=$page-$show;$i<=$page+$show;$i++)
             {
                 if($i==$page) $class='class="active"'; else $class='';;
-                if($i>0 && $i<=$max_page) echo '<a href="index.php?do='.$do.'&page='.$i.'" '.$class.'>'.$i.'</a>';
+                if($i>0 && $i<=$max_page) echo '<a href="index.php?do='.$do.'&page='.$i.$get_param.'" '.$class.'>'.$i.'</a>';
             }
-            if($page<$max_page) echo '<a href="index.php?do='.$do.'&page='.($page+1).'">Next page</a>';
-            if($page<$max_page-$show && $max_page>1) echo '<a href="index.php?do='.$do.'&page='.$max_page.'"> Last page </a>';
+            if($page<$max_page) echo '<a href="index.php?do='.$do.'&page='.($page+1).$get_param.'">Next page</a>';
+            if($page<$max_page-$show && $max_page>1) echo '<a href="index.php?do='.$do.'&page='.$max_page.$get_param.'"> Last page </a>';
             echo '</div>';
             // Paginator
         ?>
@@ -176,3 +258,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         <!-- Content end-->
     </div>
 </div>
+
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/daterangepicker.css" />

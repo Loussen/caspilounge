@@ -46,8 +46,8 @@ $data['instagram'] = $instagram;
 $data['google_map'] = $google_map;
 $data['address'] = $address;
 $data['phone'] = $phone;
-$data['text'] = $text;
-$data['footer'] = $footer;
+$data['text'] = strip_tags(html_entity_decode($text));
+$data['footer'] = strip_tags(html_entity_decode($footer));
 
 
 $response = json_encode(array("status"=>true, "type"=>"contacts", "data" => $data));

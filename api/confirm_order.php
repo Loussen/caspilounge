@@ -123,7 +123,7 @@ if($phpInput)
 
                     if($update==1)
                     {
-                        $response = json_encode(array("status"=>true, "type"=>"confirm_order", "message" => "Success"));
+                        $response = json_encode(array("status"=>true, "type"=>"confirm_order", "message" => "Success", "payment_type" => $status_order_new));
                     }
                     else
                     {

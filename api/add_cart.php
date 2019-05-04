@@ -143,7 +143,7 @@ if($phpInput)
 
                 if($insert==1)
                 {
-                    $response = json_encode(array("status"=>true, "type"=>"add_cart", "message" => "Success"));
+                    $response = json_encode(array("status"=>true, "type"=>"add_cart", "message" => "Success", "order_id" => $order_id));
                 }
                 else
                 {
