@@ -251,13 +251,27 @@ if($phpInput)
                             }
                             catch (\SquareConnect\ApiException $e)
                             {
-                                echo "Caught exception!<br/>";
-                                print_r("<strong>Response body:</strong><br/>");
-                                echo "<pre>"; var_dump($e->getResponseBody()); echo "</pre>";
-                                echo "<br/><strong>Response headers:</strong><br/>";
-                                echo "<pre>"; var_dump($e->getResponseHeaders()); echo "</pre>";
+//                                echo "Caught exception!<br/>";
+//                                print_r("<strong>Response body:</strong><br/>");
+//                                echo "<pre>"; var_dump($e->getResponseBody()); echo "</pre>";
+//                                echo "<br/><strong>Response headers:</strong><br/>";
+//                                echo "<pre>"; var_dump($e->getResponseHeaders()); echo "</pre>";
 
-                                $response = json_encode(array("status"=>false, "type"=>"process_card", "err" => $e));
+//                                var_dump($e->getResponseBody()->errors);
+
+                                $response_json = "'".json_encode($e->getResponseBody()->errors)."'";
+
+                                $created_at = time();
+
+                                $updated_at = 0;
+
+//                                echo "INSERT INTO `logs` (`order_id`,`response`,`created_at`,`updated_at`) VALUES ($order_id,$response_json,$created_at,$updated_at)"; exit;
+
+                                $stmt_insert = mysqli_prepare($db, "INSERT INTO `logs` (`order_id`,`response`,`created_at`,`updated_at`) VALUES (?,?,?,?)");
+                                $stmt_insert->bind_param('isii', $order_id,$response_json,$created_at,$updated_at);
+                                $trans_sql = $stmt_insert->execute();
+
+                                $response = json_encode(array("status"=>false, "type"=>"process_card", "err" => $e->getResponseBody()));
                             }
                         }
                     }

@@ -130,14 +130,20 @@ if($phpInput)
             {
                 $response = json_encode(array("status"=>true, "type"=>"update_cart", "message" => "Success"));
             }
+            else
+            {
+                $response = json_encode(array("status"=>false, "type"=>"update_cart", "err" => "Update or insert orders and transactions"));
+            }
         }
         catch (\SquareConnect\ApiException $e)
         {
-            echo "Caught exception!<br/>";
-            print_r("<strong>Response body:</strong><br/>");
-            echo "<pre>"; var_dump($e->getResponseBody()); echo "</pre>";
-            echo "<br/><strong>Response headers:</strong><br/>";
-            echo "<pre>"; var_dump($e->getResponseHeaders()); echo "</pre>";
+//            echo "Caught exception!<br/>";
+//            print_r("<strong>Response body:</strong><br/>");
+//            echo "<pre>"; var_dump($e->getResponseBody()); echo "</pre>";
+//            echo "<br/><strong>Response headers:</strong><br/>";
+//            echo "<pre>"; var_dump($e->getResponseHeaders()); echo "</pre>";
+
+            $response = json_encode(array("status"=>false, "type"=>"cart", "err" => $e->getResponseBody()));
         }
     }
 }

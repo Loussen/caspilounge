@@ -17,10 +17,95 @@
     }
 </style>
 <?php
+
 // Paginator
 $limit=intval($_GET["limit"]);
 if($limit!=15 && $limit!=25 && $limit!=50 && $limit!=100 && $limit!=999999) $limit=15;
-$query_count="select id from $do ";
+$query_count="select sum(cart.total) as total, orders.id from $do left join cart on cart.order_id=orders.id where 1=1";
+
+// Get params for filters
+$add_information_sql = $add_information_sql_cart = "";
+if(isset($_GET['pay_type_get']) && !empty($_GET['pay_type_get']))
+{
+    $pay_type_get = intval($_GET['pay_type_get']);
+
+    $query_count.=" and orders.pay_type='$pay_type_get' ";
+    $add_information_sql .= " and orders.pay_type='$pay_type_get' ";
+}
+if(isset($_GET['paid_type']) && !empty($_GET['paid_type']) && intval($_GET['paid_type'])>0)
+{
+    $paid_type = intval($_GET['paid_type']);
+
+    $paid_type_sql = $paid_type;
+    if($paid_type==1000)
+    {
+        $paid_type_sql = 0;
+    }
+
+    $query_count.=" and orders.paid='$paid_type_sql' ";
+    $add_information_sql .= " and orders.paid='$paid_type_sql' ";
+}
+if(isset($_GET['total_from']) && !empty($_GET['total_from']))
+{
+    $total_from = $_GET['total_from'];
+
+    $query_count.=" and cart.total>='$total_from' ";
+    $add_information_sql .= " and cart.total>='$total_from' ";
+}
+if(isset($_GET['total_to']) && !empty($_GET['total_to']))
+{
+    $total_to = $_GET['total_to'];
+
+    $query_count.=" and cart.total<='$total_to' ";
+    $add_information_sql .= " and cart.total<='$total_to' ";
+}
+if(isset($_GET['status_type']) && !empty($_GET['status_type']) && intval($_GET['status_type'])>0)
+{
+    $status_type = intval($_GET['status_type']);
+
+    $status_sql = $status_type;
+    if($status_type==1000)
+    {
+        $status_sql = 0;
+    }
+
+    $query_count.=" and orders.status='$status_sql' ";
+    $add_information_sql .= " and orders.status='$status_sql' ";
+}
+if(isset($_GET['datetimes']) && !empty($_GET['datetimes']))
+{
+    $datetimes = $_GET['datetimes'];
+
+    $datetime = explode("-",$datetimes);
+
+    $fromDate = strtotime($datetime[0]);
+    $toDate = strtotime($datetime[1]);
+
+    $query_count.=" and orders.payment_date>='$fromDate' and orders.payment_date<='$toDate' ";
+    $add_information_sql .= " and orders.payment_date>='$fromDate' and orders.payment_date<='$toDate' ";
+}
+if(isset($_GET['datetimes2']) && !empty($_GET['datetimes2']))
+{
+    $datetimes2 = $_GET['datetimes2'];
+
+    $datetime = explode("-",$datetimes2);
+
+    $fromDate = strtotime($datetime[0]);
+    $toDate = strtotime($datetime[1]);
+
+    $query_count.=" and orders.created_at>='$fromDate' and orders.created_at<='$toDate' ";
+    $add_information_sql .= " and orders.created_at>='$fromDate' and orders.created_at<='$toDate' ";
+}
+if(isset($_GET['customer_id']) && !empty($_GET['customer_id']))
+{
+    $customer_id = intval($_GET['customer_id']);
+
+    $query_count.=" and orders.customer_id='$customer_id' ";
+    $add_information_sql .= " and orders.customer_id='$customer_id' ";
+}
+
+$query_count.=' group by cart.order_id';
+
 $count_rows=mysqli_num_rows(mysqli_query($db,$query_count));
 $max_page=ceil($count_rows/$limit);
 $page=intval($_GET["page"]); if($page<1) $page=1; if($page>$max_page) $page=$max_page; if($page<1) $page=1;
@@ -217,7 +302,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                 Status <br />
                 <select name="status">
                     <?php
-                    $status_arr = [0=>'Deactive',1=>'Active',2=>'Shipping',3=>'Delivered'];
+                    $status_arr = [1000=>'Deactive',1=>'Active',2=>'Shipping',3=>'Delivered'];
                     foreach ($status_arr as $key=>$value)
                     {
                         $selected = ($key==$information['status']) ? 'selected' : '';
@@ -403,12 +488,12 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         </form>
         <div>
 
-            <div style="float: left;">
-                <a href="javascript:void(0);" class="chbx_del"><img src="images/icon_delete.png" alt="" title="" /></a>
-                <a href="javascript:void(0);" class="chbx_active" data-val="1"><img src="images/1_lamp.png" alt="" title="" /></a>
-                <a href="javascript:void(0);" class="chbx_active" data-val="2"><img src="images/0_lamp.png" alt="" title="" /></a>
-                <input type="hidden" value="index.php?do=<?=$do?>&page=<?=$page?>&limit=<?=$limit?>&forId=2" id="current_link" />
-            </div>
+<!--            <div style="float: left;">-->
+<!--                <a href="javascript:void(0);" class="chbx_del"><img src="images/icon_delete.png" alt="" title="" /></a>-->
+<!--                <a href="javascript:void(0);" class="chbx_active" data-val="1"><img src="images/1_lamp.png" alt="" title="" /></a>-->
+<!--                <a href="javascript:void(0);" class="chbx_active" data-val="2"><img src="images/0_lamp.png" alt="" title="" /></a>-->
+<!--                <input type="hidden" value="index.php?do=--><?//=$do?><!--&page=--><?//=$page?><!--&limit=--><?//=$limit?><!--&forId=2" id="current_link" />-->
+<!--            </div>-->
 
             <div style="float: right;">
                 <u>Show data's limit:</u>
@@ -420,31 +505,153 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                     <option value="index.php?<?=addFullUrl(array('limit'=>999999,'page'=>0))?>" <?php if($limit==999999) echo 'selected="selected"'; ?>>ALL</option>
                 </select>
             </div>
+
+            <div>
+                <form method="get">
+                    <input type="hidden" name="do" value="<?=$do?>">
+                    <select name="pay_type_get">
+                        <option value="" selected>Select pay type</option>
+                        <?php
+                        $pay_type_arr = [1=>'Cash',2=>'Card'];
+
+                        foreach($pay_type_arr as $key=>$value)
+                        {
+                            $selected = ($key==$pay_type_get) ? 'selected' : '';
+                            ?>
+                            <option <?=$selected?> value="<?=$key?>"><?=$value?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                    <input type="text" name="datetimes" autocomplete="off" placeholder="payment date range" style="width: 250px;" value="<?=$datetimes?>" />
+                    <select name="paid_type">
+                        <option value selected>Select paid type</option>
+                        <?php
+                        $paid_type_arr = [1000=>'Unpaid',1=>'Paid'];
+
+                        foreach($paid_type_arr as $key=>$value)
+                        {
+                            $selected = ($key===$paid_type) ? 'selected' : '';
+                            ?>
+                            <option <?=$selected?> value="<?=$key?>"><?=$value?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                    <input type="text" style="width: 100px;" name="total_from" placeholder="total from" value="<?=$total_from?>"> -
+                    <input type="text" style="width: 100px;" name="total_to" placeholder="total to" value="<?=$total_to?>">
+                    <input type="text" name="datetimes2" autocomplete="off" placeholder="order date range" style="width: 250px;" value="<?=$datetimes2?>" />
+                    <select name="status_type">
+                        <option value="" selected>Select status</option>
+                        <?php
+                        $status_type_arr = [1000=>'Deactive',1=>'Active',2=>'Shipping',3=>'Delivered'];
+
+                        foreach($status_type_arr as $key=>$value)
+                        {
+                            $selected = ($key===$status_type) ? 'selected' : '';
+                            ?>
+                            <option <?=$selected?> value="<?=$key?>"><?=$value?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                    <select name="customer_id" id="customers">
+                        <option value="" selected>Select customer</option>
+                        <?php
+                            $sql_customers = mysqli_query($db, "SELECT customers.id,firstname,lastname,email,phone FROM customers inner join orders on orders.customer_id=customers.id order by customers.created_at desc");
+
+                            while ($row_customer=mysqli_fetch_assoc($sql_customers))
+                            {
+                                $selected = ($row_customer['id']==$customer_id) ? 'selected' : '';
+                                ?>
+                                <option <?=$selected?> value="<?=$row_customer['id']?>"><?=$row_customer['firstname']." ".$row_customer['lastname'].", ".$row_customer['email'].", ".$row_customer['phone']?></option>
+                                <?php
+                            }
+                        ?>
+                    </select>
+
+                    <script>
+                        $(function() {
+                            $('input[name="datetimes"]').daterangepicker({
+                                timePicker: true,
+                                // startDate: moment().startOf('hour'),
+                                // endDate: moment().startOf('hour').add(32, 'hour'),
+                                locale: {
+                                    format: 'M/DD/YYYY hh:mm A'
+                                },
+                                autoUpdateInput: false
+                            });
+
+                            $('input[name="datetimes2"]').daterangepicker({
+                                timePicker: true,
+                                // startDate: moment().startOf('hour'),
+                                // endDate: moment().startOf('hour').add(32, 'hour'),
+                                locale: {
+                                    format: 'M/DD/YYYY hh:mm A'
+                                },
+                                autoUpdateInput: false
+                            });
+
+                            $('input[name="datetimes"]').on('apply.daterangepicker', function(ev, picker) {
+                                $(this).val(picker.startDate.format('M/DD/YYYY hh:mm A') + ' - ' + picker.endDate.format('M/DD/YYYY hh:mm A'));
+                            });
+
+                            $('input[name="datetimes"]').on('cancel.daterangepicker', function(ev, picker) {
+                                $(this).val('');
+                            });
+
+                            $('input[name="datetimes2"]').on('apply.daterangepicker', function(ev, picker) {
+                                $(this).val(picker.startDate.format('M/DD/YYYY hh:mm A') + ' - ' + picker.endDate.format('M/DD/YYYY hh:mm A'));
+                            });
+
+                            $('input[name="datetimes2"]').on('cancel.daterangepicker', function(ev, picker) {
+                                $(this).val('');
+                            });
+                        });
+                    </script>
+                    <button class="alert_success" type="submit">Search</button>
+                </form>
+            </div>
         </div>
 
         <br class="clear" />
         <?php
         echo '<table class="data" width="100%" cellpadding="0" cellspacing="0" style="margin: 15px 0; text-align: center;"><thead><tr>
                 <th style="width:5%"><input type="checkbox" data-val="0" name="all_check" id="hamisini_sec" value="all_check" /> №</th>
-                <th style="width:7%">Pay type</th>
+                <th style="width:5%">Pay type</th>
                 <th style="width:20%">Payment date (Y-m-d)</th>
                 <th style="width:7%">Paid</th>
-                <th style="width:20%">Total order</th>
-                <th style="width:20%">Order date (Y-m-d)</th>
+                <th style="width:12%">Total order</th>
+                <th style="width:13%">Order date (Y-m-d)</th>
+                <th style="width:15%">Transaction</th>
                 <th style="width:10%">Status</th>
                 <th style="width:30%">Editing</th>
 </tr></thead><tbody>';
-        $query=str_replace("select id ","select * ",$query_count);
-        $query.=" order by auto_id desc limit $start,$limit";
-        $sql=mysqli_query($db,"select * from $do order by id desc limit $start,$limit");
+        $query=str_replace("select orders.id ","select * ",$query_count);
+        $query.=" order by orders.id desc limit $start,$limit";
+        $sql=mysqli_query($db,"select sum(cart.total) as total, orders.created_at as order_date,orders.id as id, orders.* from $do
+                                      left join cart on cart.order_id=orders.id
+                                      where 1=1 ".$add_information_sql." 
+                                      group by cart.order_id
+                                      order by orders.created_at desc,orders.payment_date desc 
+                                      limit $start,$limit");
+
+//        echo "select sum(cart.total) as total, orders.created_at as order_date,orders.id as id, orders.* from $do
+//                                      left join cart on cart.order_id=orders.id
+//                                      where 1=1 ".$add_information_sql."
+//                                      group by cart.order_id
+//                                      order by orders.payment_date desc,orders.created_at desc
+//                                      limit $start,$limit";
+
         $i = $start+1;
 
+        $total_order = 0;
         while($row=mysqli_fetch_assoc($sql))
         {
             $pay_type = ($row['pay_type']==1) ? 'Cash' : 'Card';
             $payment_date = ($row['payment_date']>0) ? date('Y-m-d H:i', $row['payment_date']) : '-';
             $paid = ($row['paid']==1) ? 'Paid' : 'Unpaid';
-            $created_at = ($row['created_at']>0) ? date('Y-m-d H:i', $row['created_at']) : '-';
+            $created_at = ($row['order_date']>0) ? date('Y-m-d H:i', $row['order_date']) : '-';
             if($row['status']==0)
             {
                 $status = 'Deactive';
@@ -462,13 +669,27 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                 $status = 'Delivered';
             }
 
+            $sql_transactions=mysqli_fetch_assoc(mysqli_query($db,"select response from transactions where order_id='$row[id]'"));
+
+            if(strlen($sql_transactions['response'])>0)
+            {
+                $click = '<a href="transactions.php?order_id='.$row['id'].'" onClick="window.open(this.href,\'Transaction\',\'resizable,height=400,width=800\'); return false;" >Click</a>';
+            }
+            else
+            {
+                $click = " - ";
+            }
+
+//            $sql_cart=mysqli_fetch_assoc(mysqli_query($db,"select sum(`total`) as total from cart where order_id='$row[id]'"));
+
             echo '<tr>
                     <td><input type="checkbox" id="chbx_'.$row["auto_id"].'" value="'.$row["auto_id"].'" onclick="chbx_(this.id)" /> '.$i.'</td>
 					<td>'.$pay_type.'</td>
 					<td>'.$payment_date.'</td>
 					<td>'.$paid.'</td>
-					<td>'.$row["special_req"].'</td>
+					<td>'.$row['total'].'</td>
 					<td>'.$created_at.'</td>
+					<td>'.$click.'</td>
 					<td>'.$status.'</td>
 					<td>
                         <a target="_blank" href="index.php?do='.$do.'&page='.$page.'&view='.$row["id"].'"><img src="images/icon_eye.png" alt="" title="View" /></a>
@@ -483,18 +704,27 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         ?>
         <div class="ps_"><?=page_nav()?></div>
         <?php
+            $get_param = '';
+            $get_param .= ($pay_type_get>0) ? '&pay_type_get='.$pay_type_get : '';
+            $get_param .= ($paid_type>0) ? '&paid_type='.$paid_type : '';
+            $get_param .= (strlen($total_from)>0) ? '&total_from='.$total_from : '';
+            $get_param .= (strlen($total_to)>0) ? '&total_to='.$total_to : '';
+            $get_param .= ($status_type>0) ? '&status_type='.$status_type : '';
+            $get_param .= (strlen($datetimes)>0) ? '&datetimes='.$datetimes : '';
+            $get_param .= (strlen($datetimes2)>0) ? '&datetimes2='.$datetimes2 : '';
+
             // Paginator
             echo '<div class="pagination">';
             $show=3;
-            if($page>$show+1) echo '<a href="index.php?do='.$do.'&page=1">First page</a>';
-            if($page>1) echo '<a href="index.php?do='.$do.'&page='.($page-1).'">Previous page</a>';
+            if($page>$show+1) echo '<a href="index.php?do='.$do.'&page=1'.$get_param.'">First page</a>';
+            if($page>1) echo '<a href="index.php?do='.$do.'&page='.($page-1).$get_param.'">Previous page</a>';
             for($i=$page-$show;$i<=$page+$show;$i++)
             {
                 if($i==$page) $class='class="active"'; else $class='';;
-                if($i>0 && $i<=$max_page) echo '<a href="index.php?do='.$do.'&page='.$i.'" '.$class.'>'.$i.'</a>';
+                if($i>0 && $i<=$max_page) echo '<a href="index.php?do='.$do.'&page='.$i.$get_param.'" '.$class.'>'.$i.'</a>';
             }
-            if($page<$max_page) echo '<a href="index.php?do='.$do.'&page='.($page+1).'">Next page</a>';
-            if($page<$max_page-$show && $max_page>1) echo '<a href="index.php?do='.$do.'&page='.$max_page.'"> Last page </a>';
+            if($page<$max_page) echo '<a href="index.php?do='.$do.'&page='.($page+1).$get_param.'">Next page</a>';
+            if($page<$max_page-$show && $max_page>1) echo '<a href="index.php?do='.$do.'&page='.$max_page.$get_param.'"> Last page </a>';
             echo '</div>';
             // Paginator
         ?>
@@ -509,3 +739,16 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         text-align: center;
     }
 </style>
+
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/daterangepicker.css" />
+<script type="text/javascript" src="js/selectsize.js"></script>
+<link rel="stylesheet" type="text/css" href="css/selectsize.css" />
+
+<script type="text/javascript">
+    $('#customers').selectize({
+        create: true,
+        sortField: 'text'
+    });
+</script>

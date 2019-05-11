@@ -56,6 +56,7 @@ if($result->num_rows>0)
 
         $data[$i]['image_name'] = SITE_PATH."/images/pevents/".$row['image_name'];
         $data[$i]['date'] = date("d/m/Y", $row['date']);
+        $data[$i]['text'] =strip_tags(html_entity_decode($row['text']));
 
         $i++;
     }
