@@ -673,11 +673,20 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
 
             if(strlen($sql_transactions['response'])>0)
             {
-                $click = '<a href="transactions.php?order_id='.$row['id'].'" onClick="window.open(this.href,\'Transaction\',\'resizable,height=400,width=800\'); return false;" >Click</a>';
+                $click_trans = '<a href="transactions.php?order_id='.$row['id'].'" onClick="window.open(this.href,\'Transaction\',\'resizable,height=400,width=800\'); return false;" >Click</a>';
             }
             else
             {
-                $click = " - ";
+                $click_trans = " - ";
+            }
+
+            if($row['customer_id']>0)
+            {
+                $click_mail = '<a href="sendmail.php?user_id='.$row['customer_id'].'" onClick="window.open(this.href,\'Send Mail\',\'resizable,height=400,width=800\'); return false;" ><img src="images/mail.png" alt="" title="Mail" /></a>';
+            }
+            else
+            {
+                $click_mail = '<img src="images/mail_disable.png" alt="" title="Mail" style="cursor:no-drop;" />';
             }
 
 //            $sql_cart=mysqli_fetch_assoc(mysqli_query($db,"select sum(`total`) as total from cart where order_id='$row[id]'"));
@@ -689,9 +698,10 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
 					<td>'.$paid.'</td>
 					<td>'.$row['total'].'</td>
 					<td>'.$created_at.'</td>
-					<td>'.$click.'</td>
+					<td>'.$click_trans.'</td>
 					<td>'.$status.'</td>
 					<td>
+					    '.$click_mail.'
                         <a target="_blank" href="index.php?do='.$do.'&page='.$page.'&view='.$row["id"].'"><img src="images/icon_eye.png" alt="" title="View" /></a>
 						<a href="index.php?do='.$do.'&page='.$page.'&edit='.$row["id"].'"><img src="images/icon_edit.png" alt="" title="Edit" /></a>
 						<a href="index.php?do='.$do.'&page='.$page.'&delete='.$row["id"].'" class="delete"><img src="images/icon_delete.png" alt="" title="Sil" /></a>';
