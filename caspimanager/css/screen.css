@@ -1164,7 +1164,7 @@ table#graph_data td.hover
 	display: table-row-group;
 }
 
-div.new-order-alert, a.new_order
+div.new-order-alert, button.new_order
 {
 	display: none;
 }

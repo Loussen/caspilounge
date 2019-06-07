@@ -892,13 +892,13 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                 if(data.code==1)
                 {
                     $('div.new-order-alert').show();
-                    $('a.new_order').show();
-                    $('a.new_order span.count').html(data.count);
+                    $('button.new_order').show();
+                    $('button.new_order span.count').html(data.count);
                 }
                 else
                 {
                     $('div.new-order-alert').hide();
-                    $('a.new_order').hide();
+                    $('button.new_order').hide();
                 }
             },"json");
         }, 10000);
@@ -907,13 +907,13 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
             if(data.code==1)
             {
                 $('div.new-order-alert').show();
-                $('a.new_order').show();
-                $('a.new_order span.count').html(data.count);
+                $('button.new_order').show();
+                $('button.new_order span.count').html(data.count);
             }
             else
             {
                 $('div.new-order-alert').hide();
-                $('a.new_order').hide();
+                $('button.new_order').hide();
             }
         },"json");
     });
