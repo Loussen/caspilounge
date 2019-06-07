@@ -198,7 +198,7 @@ else
     if($message==2) echo '<div class="alert_error"><p><img src="images/icon_error.png" alt="delete" class="mid_align"/>Error</p></div>';
 ?>
 <form action="" method="post" style="padding: 15px;">
-    <h2>Send Mail for order</h2>
+    <h2>Send Mail for order : <?=$row_users['email']?></h2>
     <select name="message_type" class="form-control" onchange="messageType(event)">
         <option value="1">Special message</option>
         <?php

@@ -15,6 +15,11 @@
     table.info_table tr:nth-child(even) {
         background-color: #dddddd;
     }
+
+    table.data tbody tr td
+    {
+        color: #fff;
+    }
 </style>
 <?php
 
@@ -102,6 +107,14 @@ if(isset($_GET['customer_id']) && !empty($_GET['customer_id']))
 
     $query_count.=" and orders.customer_id='$customer_id' ";
     $add_information_sql .= " and orders.customer_id='$customer_id' ";
+}
+
+if(isset($_GET['order_id']) && !empty($_GET['order_id']))
+{
+    $order_id = $_GET['order_id'];
+
+    $query_count.=" and orders.id='$order_id' ";
+    $add_information_sql .= " and orders.id='$order_id' ";
 }
 
 $query_count.=' group by cart.order_id';
@@ -214,6 +227,16 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         <!-- Content start-->
         <form action="index.php?do=<?php echo $do; ?>&page=<?php echo $page; if($edit>0) echo '&edit='.$edit; ?>" method="post" id="form_login" name="form_login" enctype="multipart/form-data">
             <a href="index.php?do=<?php echo $do; ?>&add=1" style="margin-right:50px"><img src="images/icon_add.png" alt="" /> <b style="">Create new</b></a>
+
+            <span style="padding: 5px 25px; width: 10%; background-color: #FF4500; margin-right: 10px; color:#fff; float: right
+;">Deactive</span>
+            <span style="padding: 5px 25px; width: 10%; background-color: #008000; margin-right: 10px; color:#fff; float: right
+;">Active</span>
+            <span style="padding: 5px 25px; width: 10%; background-color: #0000FF; margin-right: 10px; color:#fff; float: right
+;">Shipping</span>
+            <span style="padding: 5px 25px; width: 10%; background-color: #999999; margin-right: 10px; color:#fff; float: right
+;">Delivered</span>
+            <span style="float: right; margin-right: 10px; margin-top: 5px;">Color's info : </span>
             <hr class="clear" />
 
             <?php
@@ -509,6 +532,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
             <div>
                 <form method="get">
                     <input type="hidden" name="do" value="<?=$do?>">
+                    <input type="text" style="width: 100px;" name="order_id" placeholder="order number" value="<?=$order_id?>">
                     <select name="pay_type_get">
                         <option value="" selected>Select pay type</option>
                         <?php
@@ -612,12 +636,19 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                     <button class="alert_success" type="submit">Search</button>
                 </form>
             </div>
+
+<!--            <div style="margin-top: 5px;">-->
+<!--                <span style="padding: 5px 25px; width: 10%; background-color: #FF4500; margin-right: 10px; color:#fff;">Deactive</span>-->
+<!--                <span style="padding: 5px 25px; width: 10%; background-color: #008000; margin-right: 10px; color:#fff;">Active</span>-->
+<!--                <span style="padding: 5px 25px; width: 10%; background-color: #0000FF; margin-right: 10px; color:#fff;">Shipping</span>-->
+<!--                <span style="padding: 5px 25px; width: 10%; background-color: #999999; margin-right: 10px; color:#fff;">Delivered</span>-->
+<!--            </div>-->
         </div>
 
         <br class="clear" />
         <?php
         echo '<table class="data" width="100%" cellpadding="0" cellspacing="0" style="margin: 15px 0; text-align: center;"><thead><tr>
-                <th style="width:5%"><input type="checkbox" data-val="0" name="all_check" id="hamisini_sec" value="all_check" /> №</th>
+                <th style="width:5%"><input type="checkbox" data-val="0" name="all_check" id="hamisini_sec" value="all_check" />ID</th>
                 <th style="width:5%">Pay type</th>
                 <th style="width:20%">Payment date (Y-m-d)</th>
                 <th style="width:7%">Paid</th>
@@ -655,18 +686,22 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
             if($row['status']==0)
             {
                 $status = 'Deactive';
+                $backcolor = '#659BF5';
             }
             elseif($row['status']==1)
             {
                 $status = 'Active';
+                $backcolor = '#008000';
             }
             elseif($row['status']==2)
             {
                 $status = 'Shipping';
+                $backcolor = '#F1AE55';
             }
             elseif($row['status']==3)
             {
                 $status = 'Delivered';
+                $backcolor = '#5AC57D';
             }
 
             $sql_transactions=mysqli_fetch_assoc(mysqli_query($db,"select response from transactions where order_id='$row[id]'"));
@@ -691,8 +726,8 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
 
 //            $sql_cart=mysqli_fetch_assoc(mysqli_query($db,"select sum(`total`) as total from cart where order_id='$row[id]'"));
 
-            echo '<tr>
-                    <td><input type="checkbox" id="chbx_'.$row["auto_id"].'" value="'.$row["auto_id"].'" onclick="chbx_(this.id)" /> '.$i.'</td>
+            echo '<tr style="background-color: '.$backcolor.'">
+                    <td><input type="checkbox" id="chbx_'.$row["auto_id"].'" value="'.$row["auto_id"].'" onclick="chbx_(this.id)" /> '.$row['id'].'</td>
 					<td>'.$pay_type.'</td>
 					<td>'.$payment_date.'</td>
 					<td>'.$paid.'</td>
@@ -722,6 +757,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
             $get_param .= ($status_type>0) ? '&status_type='.$status_type : '';
             $get_param .= (strlen($datetimes)>0) ? '&datetimes='.$datetimes : '';
             $get_param .= (strlen($datetimes2)>0) ? '&datetimes2='.$datetimes2 : '';
+            $get_param .= (strlen($order_id)>0) ? '&total_to='.$order_id : '';
 
             // Paginator
             echo '<div class="pagination">';
