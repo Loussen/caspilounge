@@ -894,6 +894,15 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                     $('button.new_order span.count').html(data.count);
                 }
             },"json");
-        }, 10000);
+        }, 2000);
+
+        $.post('new_order.php', {},function( data ) {
+            if(data.code==1)
+            {
+                $('div.new-order-alert').show();
+                $('button.new_order').show();
+                $('button.new_order span.count').html(data.count);
+            }
+        },"json");
     });
 </script>
