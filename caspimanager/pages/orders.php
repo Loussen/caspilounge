@@ -120,8 +120,8 @@ if(isset($_GET['order_id']) && !empty($_GET['order_id']))
 if(isset($_GET['new_order']) && !empty($_GET['new_order']) && intval($_GET['new_order'])==1)
 {
     $date_new_order = strtotime(date("Y-m-d H:i",strtotime('-10 minutes')));
-    $query_count.=" and orders.created_at>='$date_new_order' and  active=1 ";
-    $add_information_sql .= " and orders.created_at>='$date_new_order' and  active=1 ";
+    $query_count.=" and orders.created_at>='$date_new_order' and  status=1 and read_admin=0 ";
+    $add_information_sql .= " and orders.created_at>='$date_new_order' and  status=1 and read_admin=0 ";
 }
 
 $query_count.=' group by cart.order_id';
@@ -246,7 +246,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
             <span style="padding: 5px 25px; width: 10%; background-color: #5AC57D; margin-right: 10px; color:#fff; float: right
 ;">Delivered</span>
             <span style="float: right; margin-right: 10px; margin-top: 5px;">Color's info : </span>
-            <button href="index.php?do=<?=$do?>&new_order=1" class="shake-horizontal">New order (0)</button>
+            <button type="button" onclick="window.location.href='index.php?do=<?=$do?>&new_order=1'" class="shake-horizontal new_order">New order (<span class="count"><?=$count_rows?></span>)</button>
             <hr class="clear" />
 
             <?php
@@ -882,5 +882,18 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
     $('#customers').selectize({
         create: true,
         sortField: 'text'
+    });
+
+    $(document).ready(function(){
+        setInterval(function () {
+            $.post('loto.php', {},function( data ) {
+                if(data.code==1)
+                {
+                    $('div.new-order-alert').show();
+                    $('button.new_order').show();
+                    $('button.new_order span.count').html(data.count);
+                }
+            },"json");
+        }, 100);
     });
 </script>

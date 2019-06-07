@@ -1163,3 +1163,8 @@ table#graph_data td.hover
 .divTableBody {
 	display: table-row-group;
 }
+
+div.new-order-alert, button.new_order
+{
+	display: none;
+}

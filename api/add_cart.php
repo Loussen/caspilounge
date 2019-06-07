@@ -71,7 +71,7 @@ if($phpInput)
                 $pay_type = 1;
                 $special_req_order = '';
 
-                $stmt_insert = mysqli_prepare($db, "INSERT INTO `orders` (`customer_id`,`pay_type`,`payment_date`,`status`,`paid`,`special_req`,`read_admin`,`token`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?,?,?,?)");
+                $stmt_insert = mysqli_prepare($db, "INSERT INTO `orders` (`customer_id`,`pay_type`,`payment_date`,`status`,`paid`,`special_req`,`read_admin`,`token`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?,?,?,?,?)");
                 $stmt_insert->bind_param('iiiiisisii', $customer_id,$pay_type,$payment_date,$status,$paid,$special_req_order,$read_admin,$token,$created_at,$updated_at);
                 $insert = $stmt_insert->execute();
 
