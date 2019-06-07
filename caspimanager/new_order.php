@@ -14,7 +14,7 @@ if($_POST || 1==1)
 {
     $date_new_order = strtotime(date("Y-m-d H:i",strtotime('-10 minutes')));
 
-    $count = mysqli_num_rows(mysqli_query($db,"SELECT count(id) FROM orders WHERE status=1 and read_admin=0"));
+    $count = mysqli_num_rows(mysqli_query($db,"SELECT id FROM orders WHERE status=1 and read_admin=0"));
 
     if($count>0)
     {

@@ -145,6 +145,11 @@ if($edit>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$ed
     exit;
 }
 
+if($edit>0)
+{
+    mysqli_query($db,"update $do set read_admin=1 where id='$edit'");
+}
+
 if($_POST) // Add && edit
 {
     extract($_POST);
@@ -159,8 +164,6 @@ if($_POST) // Add && edit
         $id=$edit;
         $last_order=$info_edit["order_number"];
         $active=$info_edit["active"];
-
-        mysqli_query($db,"update $do set read_admin=1 where id='$edit'");
     }
     else $add_where="";
 
@@ -813,7 +816,6 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         letter-spacing: 2px;
         border-radius: 10px;
     }
-    bu class
     @-webkit-keyframes shake-horizontal {
         0%,
         100% {
@@ -890,18 +892,28 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                 if(data.code==1)
                 {
                     $('div.new-order-alert').show();
-                    $('button.new_order').show();
-                    $('button.new_order span.count').html(data.count);
+                    $('a.new_order').show();
+                    $('a.new_order span.count').html(data.count);
+                }
+                else
+                {
+                    $('div.new-order-alert').hide();
+                    $('a.new_order').hide();
                 }
             },"json");
-        }, 2000);
+        }, 10000);
 
         $.post('new_order.php', {},function( data ) {
             if(data.code==1)
             {
                 $('div.new-order-alert').show();
-                $('button.new_order').show();
-                $('button.new_order span.count').html(data.count);
+                $('a.new_order').show();
+                $('a.new_order span.count').html(data.count);
+            }
+            else
+            {
+                $('div.new-order-alert').hide();
+                $('a.new_order').hide();
             }
         },"json");
     });
