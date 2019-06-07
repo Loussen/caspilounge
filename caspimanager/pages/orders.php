@@ -120,8 +120,8 @@ if(isset($_GET['order_id']) && !empty($_GET['order_id']))
 if(isset($_GET['new_order']) && !empty($_GET['new_order']) && intval($_GET['new_order'])==1)
 {
     $date_new_order = strtotime(date("Y-m-d H:i",strtotime('-10 minutes')));
-    $query_count.=" and orders.created_at>='$date_new_order' and  status=1 and read_admin=0 ";
-    $add_information_sql .= " and orders.created_at>='$date_new_order' and  status=1 and read_admin=0 ";
+    $query_count.=" and  status=1 and read_admin=0 ";
+    $add_information_sql .= " and  status=1 and read_admin=0 ";
 }
 
 $query_count.=' group by cart.order_id';
@@ -886,7 +886,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
 
     $(document).ready(function(){
         setInterval(function () {
-            $.post('loto.php', {},function( data ) {
+            $.post('new_order.php', {},function( data ) {
                 if(data.code==1)
                 {
                     $('div.new-order-alert').show();
@@ -894,6 +894,6 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
                     $('button.new_order span.count').html(data.count);
                 }
             },"json");
-        }, 100);
+        }, 10000);
     });
 </script>
