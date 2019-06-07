@@ -249,7 +249,7 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
             <span style="padding: 5px 25px; width: 10%; background-color: #5AC57D; margin-right: 10px; color:#fff; float: right
 ;">Delivered</span>
             <span style="float: right; margin-right: 10px; margin-top: 5px;">Color's info : </span>
-            <button type="button" onclick="window.location.href='index.php?do=<?=$do?>&new_order=1'" class="shake-horizontal new_order">New order (<span class="count"><?=$count_rows?></span>)</button>
+            <button type="button" onclick="window.open('index.php?do=<?=$do?>&new_order=1')" class="shake-horizontal new_order">New order (<span class="count"><?=$count_rows?></span>)</button>
             <hr class="clear" />
 
             <?php
