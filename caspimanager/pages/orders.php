@@ -22,7 +22,6 @@
     }
 </style>
 <?php
-
 // Paginator
 $limit=intval($_GET["limit"]);
 if($limit!=15 && $limit!=25 && $limit!=50 && $limit!=100 && $limit!=999999) $limit=15;
@@ -117,6 +116,14 @@ if(isset($_GET['order_id']) && !empty($_GET['order_id']))
     $add_information_sql .= " and orders.id='$order_id' ";
 }
 
+// New orders
+if(isset($_GET['new_order']) && !empty($_GET['new_order']) && intval($_GET['new_order'])==1)
+{
+    $date_new_order = strtotime(date("Y-m-d H:i",strtotime('-10 minutes')));
+    $query_count.=" and orders.created_at>='$date_new_order' and  active=1 ";
+    $add_information_sql .= " and orders.created_at>='$date_new_order' and  active=1 ";
+}
+
 $query_count.=' group by cart.order_id';
 
 $count_rows=mysqli_num_rows(mysqli_query($db,$query_count));
@@ -152,6 +159,8 @@ if($_POST) // Add && edit
         $id=$edit;
         $last_order=$info_edit["order_number"];
         $active=$info_edit["active"];
+
+        mysqli_query($db,"update $do set read_admin=1 where id='$edit'");
     }
     else $add_where="";
 
@@ -228,20 +237,27 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         <form action="index.php?do=<?php echo $do; ?>&page=<?php echo $page; if($edit>0) echo '&edit='.$edit; ?>" method="post" id="form_login" name="form_login" enctype="multipart/form-data">
             <a href="index.php?do=<?php echo $do; ?>&add=1" style="margin-right:50px"><img src="images/icon_add.png" alt="" /> <b style="">Create new</b></a>
 
-            <span style="padding: 5px 25px; width: 10%; background-color: #FF4500; margin-right: 10px; color:#fff; float: right
+            <span style="padding: 5px 25px; width: 10%; background-color: #659BF5; margin-right: 10px; color:#fff; float: right
 ;">Deactive</span>
             <span style="padding: 5px 25px; width: 10%; background-color: #008000; margin-right: 10px; color:#fff; float: right
 ;">Active</span>
-            <span style="padding: 5px 25px; width: 10%; background-color: #0000FF; margin-right: 10px; color:#fff; float: right
+            <span style="padding: 5px 25px; width: 10%; background-color: #F1AE55; margin-right: 10px; color:#fff; float: right
 ;">Shipping</span>
-            <span style="padding: 5px 25px; width: 10%; background-color: #999999; margin-right: 10px; color:#fff; float: right
+            <span style="padding: 5px 25px; width: 10%; background-color: #5AC57D; margin-right: 10px; color:#fff; float: right
 ;">Delivered</span>
             <span style="float: right; margin-right: 10px; margin-top: 5px;">Color's info : </span>
+            <button href="index.php?do=<?=$do?>&new_order=1" class="shake-horizontal">New order (0)</button>
             <hr class="clear" />
 
             <?php
                 if($add==1 || $edit>0) $hide=""; else $hide="hide";
-                if($view>0) $hide_view=""; else $hide_view="hide";
+                if($view>0)
+                {
+                    $hide_view="";
+
+                    mysqli_query($db,"update $do set read_admin=1 where id='$view'");
+                }
+                else $hide_view="hide";
 
                 $information=mysqli_fetch_assoc(mysqli_query($db,"select * from $do where id='$edit'"));
 
@@ -783,6 +799,76 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
     table.data tr th, table.data tr th
     {
         text-align: center;
+    }
+
+    .shake-horizontal {
+        -webkit-animation: shake-horizontal 2s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+        animation: shake-horizontal 2s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+
+        background: red;
+        border: 0;
+        padding: 5px 30px;
+        color: #fff;
+        font-weight: bold;
+        letter-spacing: 2px;
+        border-radius: 10px;
+    }
+    bu class
+    @-webkit-keyframes shake-horizontal {
+        0%,
+        100% {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+        10%,
+        30%,
+        50%,
+        70% {
+            -webkit-transform: translateX(-10px);
+            transform: translateX(-10px);
+        }
+        20%,
+        40%,
+        60% {
+            -webkit-transform: translateX(10px);
+            transform: translateX(10px);
+        }
+        80% {
+            -webkit-transform: translateX(8px);
+            transform: translateX(8px);
+        }
+        90% {
+            -webkit-transform: translateX(-8px);
+            transform: translateX(-8px);
+        }
+    }
+    @keyframes shake-horizontal {
+        0%,
+        100% {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+        10%,
+        30%,
+        50%,
+        70% {
+            -webkit-transform: translateX(-10px);
+            transform: translateX(-10px);
+        }
+        20%,
+        40%,
+        60% {
+            -webkit-transform: translateX(10px);
+            transform: translateX(10px);
+        }
+        80% {
+            -webkit-transform: translateX(8px);
+            transform: translateX(8px);
+        }
+        90% {
+            -webkit-transform: translateX(-8px);
+            transform: translateX(-8px);
+        }
     }
 </style>
 

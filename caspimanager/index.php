@@ -42,6 +42,9 @@ if($checkboxes!=''){
 <head><?php include "pages/layouts/head.php"; ?></head>
 <body>
 <div class="content_wrapper">
+    <div class="alert alert-warning text-center new-order-alert" style="margin-bottom: 0;">
+        Please check new active unread orders
+    </div>
 	<?php include "pages/layouts/top.php"; ?>
 	<?php include "pages/layouts/menu.php"; ?>
 	<div id="content">

@@ -67,12 +67,12 @@ if($phpInput)
             if($stmt_select->num_rows<1 || !$order_id>0)
             {
                 // default params
-                $customer_id = $payment_date = $status = $paid = 0;
+                $customer_id = $payment_date = $status = $paid = $read_admin = 0;
                 $pay_type = 1;
                 $special_req_order = '';
 
-                $stmt_insert = mysqli_prepare($db, "INSERT INTO `orders` (`customer_id`,`pay_type`,`payment_date`,`status`,`paid`,`special_req`,`token`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?,?,?,?)");
-                $stmt_insert->bind_param('iiiiissii', $customer_id,$pay_type,$payment_date,$status,$paid,$special_req_order,$token,$created_at,$updated_at);
+                $stmt_insert = mysqli_prepare($db, "INSERT INTO `orders` (`customer_id`,`pay_type`,`payment_date`,`status`,`paid`,`special_req`,`read_admin`,`token`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?,?,?,?)");
+                $stmt_insert->bind_param('iiiiisisii', $customer_id,$pay_type,$payment_date,$status,$paid,$special_req_order,$read_admin,$token,$created_at,$updated_at);
                 $insert = $stmt_insert->execute();
 
                 if($insert==1)
