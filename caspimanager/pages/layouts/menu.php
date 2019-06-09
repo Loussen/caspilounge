@@ -30,6 +30,8 @@
                 <li><a href="index.php?do=gallery"><img src="images/gallery.png" alt="" width="25"/>Gallery</a></li>
                 <li><a href="index.php?do=categories"><img src="images/categories.png" alt="" width="25"/>Menu categories</a></li>
                 <li><a href="index.php?do=foods"><img src="images/menus.png" alt="" width="25"/>Menus</a></li>
+                <li><a href="index.php?do=subscribers"><img src="images/subscribers.png" alt="" width="25"/>Subscribers</a></li>
+<!--                <li><a href="index.php?do=messages"><img src="images/mail.png" alt="" width="25"/>Messages</a></li>-->
                 <li><a href="index.php?do=contacts"><img src="images/contacts.png" alt="" width="25"/>Contacts</a></li>
                 <li><a href="index.php?do=seo"><img src="images/seoopt.png" alt="" width="25"/>Seo Opt.</a></li>
 
