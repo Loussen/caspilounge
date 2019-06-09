@@ -4,6 +4,20 @@ if(isset($_GET["do"])) $do=safe($_GET["do"]); else $do='';
 $do=str_replace(array("../","./","/"),"",$do);
 include "pages/includes/check.php";
 if(intval($user["id"])==0){header("Location: login.php"); exit('Go go go...'); die('Go go go...');}
+
+if($do!='index' && $user['login']!='admin')
+{
+    if($do=='orders' || $do=='cart' || $do=='customers' || $do=='categories' || $do=='foods' || $do=='')
+    {
+        // True
+    }
+    else
+    {
+        header("Location: index.php");
+        exit;
+    }
+}
+
 include "pages/includes/function_thumb.php";
 include "pages/includes/resize_class.php";
 //$main_lang=1;
