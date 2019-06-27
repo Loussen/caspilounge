@@ -90,16 +90,16 @@ if($phpInput)
             //Server settings
             $mail->SMTPDebug = 0;                                 // Enable verbose debug output
             $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp.yandex.com';  // Specify main and backup SMTP servers
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
             $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'fuad.hasanli@yandex.com';                 // SMTP username
-            $mail->Password = '159357fh!)(';                           // SMTP password
-            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-            $mail->Port = 587;                                    // TCP port to connect to
+            $mail->Username = 'info@caspilounge.com';                 // SMTP username
+            $mail->Password = '401501caspi123';                           // SMTP password
+            $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 465;                                    // TCP port to connect to
 
             //Recipients
-            $mail->setFrom('fuad.hasanli@yandex.com', 'Caspi Lounge catering form');
-            $mail->addAddress('fhesenli92@gmail.com', 'Caspi Lounge catering form');     // Add a recipient
+            $mail->setFrom('info@caspilounge.com', 'Caspi Lounge catering form');
+            $mail->addAddress('info@caspilounge.com', 'Caspi Lounge catering form');     // Add a recipient
             $mail->addReplyTo($data['email'], $data['name']." ".$data['surname']);
 
             //Content

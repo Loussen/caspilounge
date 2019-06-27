@@ -160,7 +160,8 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         <?php
         echo '<table class="data" width="100%" cellpadding="0" cellspacing="0" style="margin: 15px 0;"><thead><tr>
                 <th style="width:10%"><input type="checkbox" data-val="0" name="all_check" id="hamisini_sec" value="all_check" /> №</th>
-                <th style="width:50%">Email</th>
+                <th style="width:40%">Email</th>
+                <th style="width:40%">Date</th>
                 <th style="width:30%">Editing</th>
 </tr></thead><tbody>';
         $query=str_replace("select id ","select * ",$query_count);
@@ -169,9 +170,11 @@ if($delete>0 && mysqli_num_rows(mysqli_query($db,"select id from $do where id='$
         $i = $start+1;
         while($row=mysqli_fetch_assoc($sql))
         {
+            $subs_date = ($row['created_at']>0) ? date('Y-m-d H:i', $row['created_at']) : '-';
             echo '<tr>
                     <td><input type="checkbox" id="chbx_'.$row["id"].'" value="'.$row["id"].'" onclick="chbx_(this.id)" /> '.$i.'</td>
 					<td>'.stripslashes($row["email"]).'</td>
+					<td>'.$subs_date.'</td>
 					<td>
 						<a href="index.php?do='.$do.'&page='.$page.'&edit='.$row["id"].'"><img src="images/icon_edit.png" alt="" title="Edit" /></a>
 						<a href="index.php?do='.$do.'&page='.$page.'&delete='.$row["id"].'" class="delete"><img src="images/icon_delete.png" alt="" title="Sil" /></a>';

@@ -57,6 +57,12 @@ if((isset($_GET['user_id']) && !empty($_GET['user_id'])) || (isset($_POST['user_
 
             if($result->num_rows>0)
             {
+                $order_number_show = '';
+                for($i=1;$i<=(8-strlen($get_order['id']));$i++)
+                {
+                    $order_number_show .= "0";
+                }
+
                 $message_text .= '
 <style>
 
@@ -64,7 +70,7 @@ if((isset($_GET['user_id']) && !empty($_GET['user_id'])) || (isset($_POST['user_
         background-color: #dddddd;
     }
 </style>
-<div style="border: 1px solid #ddd; padding: 5px;"><h2 align="center">Orders (count: '.$result->num_rows.')</h2>
+<div style="border: 1px solid #ddd; padding: 5px;"><h2 align="center">#'.$order_number_show.$get_order['id'].' Orders (count: '.$result->num_rows.')</h2>
                     <table style="font-family: arial, sans-serif;
         border-collapse: collapse;
         width: 100%;">
@@ -150,21 +156,21 @@ if((isset($_GET['user_id']) && !empty($_GET['user_id'])) || (isset($_POST['user_
                     //Server settings
                     $mail->SMTPDebug = 0;                                 // Enable verbose debug output
                     $mail->isSMTP();                                      // Set mailer to use SMTP
-                    $mail->Host = 'smtp.yandex.com';  // Specify main and backup SMTP servers
+                    $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
                     $mail->SMTPAuth = true;                               // Enable SMTP authentication
-                    $mail->Username = 'fuad.hasanli@yandex.com';                 // SMTP username
-                    $mail->Password = '159357fh!)(';                           // SMTP password
-                    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-                    $mail->Port = 587;                                    // TCP port to connect to
+                    $mail->Username = 'info@caspilounge.com';                 // SMTP username
+                    $mail->Password = '401501caspi123';                           // SMTP password
+                    $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+                    $mail->Port = 465;                                    // TCP port to connect to
 
                     //Recipients
-                    $mail->setFrom('fuad.hasanli@yandex.com', 'Caspi Lounge order');
+                    $mail->setFrom('info@caspilounge.com', 'Caspi Lounge order');
                     $mail->addAddress($row_users['email'], 'Caspi Lounge order');     // Add a recipient
-                    $mail->addReplyTo($row_users['email'], 'Caspi Lounge order');
+                    $mail->addReplyTo('info@caspilounge.com', 'Caspi Lounge order');
 
                     //Content
                     $mail->isHTML(true);                                  // Set email format to HTML
-                    $mail->Subject = 'Caspi Lounge order';
+                    $mail->Subject = 'Caspi Lounge order (#'.$order_number_show.$get_order['id'].')';
                     $mail->Body = $message_text;
 
                     $mail->send();
@@ -198,7 +204,7 @@ else
     if($message==2) echo '<div class="alert_error"><p><img src="images/icon_error.png" alt="delete" class="mid_align"/>Error</p></div>';
 ?>
 <form action="" method="post" style="padding: 15px;">
-    <h2>Send Mail for order : <?=$row_users['email']?></h2>
+    <h2>Send Mail for order : <?=$row_users['email']?> (#<?=$order_number_show.$get_order['id']?>)</h2>
     <select name="message_type" class="form-control" onchange="messageType(event)">
         <option value="1">Special message</option>
         <?php

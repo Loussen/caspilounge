@@ -21,7 +21,7 @@ if(isset($_GET['datetimes']) && !empty($_GET['datetimes']) && strlen($_GET['date
     $add_information_sql .= " and created_at>='$fromDate' and created_at<='$toDate' ";
 }
 
-$sql = mysqli_query($db,"select `email` from `subscribers` where 1=1 ".$add_information_sql." order by created_at desc");
+$sql = mysqli_query($db,"select `email` from `subscribers` where active=1 ".$add_information_sql." order by created_at desc");
 
 if(mysqli_num_rows($sql)>0)
 {
